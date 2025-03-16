@@ -1,0 +1,56 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class QueueTicket extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'queue_id',
+        'client_id',
+        'ticket_number',
+        'status',
+        'type',
+        'called_at',
+        'expired_at',
+    ];
+
+    static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->ticket_number = self::generateTicketNumber($model->queue_id);
+        });
+    }
+
+    static function generateTicketNumber($queueId): int
+    {
+        $lastTicket = self::where('queue_id', $queueId)
+            ->orderBy('created_at', 'desc')
+            ->first();
+        $lastTicketNumber = $lastTicket ? $lastTicket->ticket_number : 0;
+        return $lastTicketNumber + 1;
+    }
+
+    public function client(): BelongsTo
+    {
+        return $this->belongsTo(Client::class);
+    }
+
+    public function queue(): BelongsTo
+    {
+        return $this->belongsTo(Queue::class);
+    }
+
+    public function notifications(): QueueTicket|HasMany
+    {
+        return $this->hasMany(Notification::class);
+    }
+}

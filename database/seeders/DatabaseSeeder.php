@@ -37,7 +37,7 @@ class DatabaseSeeder extends Seeder
 
             $queue = Queue::create([
                 'supermarket_id' => $supermarket->id,
-                'name' => 'Queue',
+                'name' => fake()->name(),
                 'is_priority' => false,
             ]);
 
@@ -47,7 +47,7 @@ class DatabaseSeeder extends Seeder
 
             $queuePriority = Queue::create([
                 'supermarket_id' => $supermarket->id,
-                'name' => 'Queue Priority',
+                'name' => fake()->name(),
                 'is_priority' => true,
             ]);
 

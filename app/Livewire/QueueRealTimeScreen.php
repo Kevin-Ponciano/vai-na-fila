@@ -2,19 +2,20 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
 use App\Models\Queue;
+use Livewire\Component;
 
-class QueueManager extends Component
+class QueueRealTimeScreen extends Component
 {
+
     public Queue $queue;
+
     public function mount($id)
     {
-
         $this->queue = \Auth::user()->supermarket->queues->find($id);
     }
     public function render()
     {
-        return view('livewire.queue-manager');
+        return view('livewire.queue-real-time-screen');
     }
 }

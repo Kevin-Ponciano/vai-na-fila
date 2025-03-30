@@ -1,6 +1,7 @@
 <?php
 
-use App\Livewire\Queue;
+use App\Livewire\QueueRealTimeScreen;
+use App\Livewire\Queues;
 use App\Livewire\QueueManager;
 use App\Livewire\Reports;
 use App\Livewire\Users;
@@ -16,8 +17,9 @@ Route::middleware([
     'verified',
 ])->group(function () {
 
-    Route::get('/filas', Queue::class)->name('queues');
+    Route::get('/filas', Queues::class)->name('queues');
     Route::get('/filas/{id}', QueueManager::class)->name('queues.show');
+    Route::get('/filas/{id}/real-time', QueueRealTimeScreen::class)->name('queues.real-time');
 
 
     Route::get('/relatorios', Reports::class)->name('reports');

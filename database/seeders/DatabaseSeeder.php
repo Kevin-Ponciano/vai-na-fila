@@ -6,8 +6,10 @@ use App\Enums\UserRole;
 use App\Models\AdminUser;
 use App\Models\Queue;
 use App\Models\QueueTicket;
+use App\Models\Report;
 use App\Models\Supermarket;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -61,6 +63,27 @@ class DatabaseSeeder extends Seeder
             QueueTicket::factory(10)->create([
                 'queue_id' => $queuePriority->id,
             ]);
+
+            $this->createReports($supermarket->id);
+        }
+    }
+
+    private function createReports($supermarketId): void
+    {
+        $startDate = Carbon::now()->subYears(3);
+        $endDate = Carbon::now();
+
+        while ($startDate < $endDate) {
+            $currentYear = $startDate->year;
+            $month = $startDate->month;
+            $createdAt = Carbon::create($currentYear, $month, 1);
+
+            Report::factory()->create([
+                'supermarket_id' => $supermarketId,
+                'created_at' => $createdAt
+            ]);
+
+            $startDate->addMonth();
         }
     }
 }

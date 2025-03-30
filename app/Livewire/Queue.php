@@ -8,6 +8,7 @@ use Livewire\Component;
 class Queue extends Component
 {
     public $queues = [];
+    public $header = 'Filas Disponiveis';
 
     public function mount()
     {
@@ -16,6 +17,6 @@ class Queue extends Component
 
     public function render()
     {
-        return view('livewire.queue');
+        return view('livewire.queue',['header' => $this->header]);
     }
 }

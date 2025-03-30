@@ -1,5 +1,5 @@
-<nav class="sm:bg-secondary border-gray-200 dark:bg-gray-900 p-2">
-    <header class="bg-secondary w-full p-4 text-white flex justify-between items-center">
+<nav class="sm:bg-secondary dark:bg-gray-900 px-2">
+    <header class="bg-secondary w-full px-4 text-white flex justify-between items-center">
         <div>
             <p class="antialiased text-sm text-white">Bem-vindo</p>
             <div class="antialiased font-bold text-white">{{auth()->user()->supermarket->name}}</div>

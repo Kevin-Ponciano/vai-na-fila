@@ -1,4 +1,16 @@
+@php use App\Models\User; @endphp
 <x-guest-layout>
+    @php
+        $userLogin = User::first()
+    @endphp
+
+    <script>
+        $(document).ready(function () {
+            $('#email').val('{{$userLogin->email}}')
+            $('#password').val('123')
+        })
+    </script>
+
     <x-authentication-card>
         <x-slot name="logo">
             <x-authentication-card-logo/>
@@ -38,7 +50,8 @@
             </div>
 
             <div class="flex justify-center items-center mt-4 mb-4">
-                <button class="bg-primary text-[#ffffff] font-bold py-2 w-full rounded rounded-xl hover:bg-primary transition duration-300 ease-in-out">
+                <button
+                    class="bg-primary text-[#ffffff] font-bold py-2 w-full rounded rounded-xl hover:bg-primary transition duration-300 ease-in-out">
                     {{ __('Log in') }}
                 </button>
             </div>

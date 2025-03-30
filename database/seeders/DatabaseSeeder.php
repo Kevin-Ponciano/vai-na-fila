@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Enums\UserRole;
+use App\Models\AdminUser;
 use App\Models\Queue;
 use App\Models\QueueTicket;
 use App\Models\Supermarket;
@@ -19,6 +20,12 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $supermarkets = Supermarket::factory(5)->create();
+
+        AdminUser::create([
+            'name' => 'admin',
+            'email'=>'admin@admin',
+            'password' => bcrypt('123'),
+        ]);
 
         foreach ($supermarkets as $supermarket) {
             $user = User::factory()->create([

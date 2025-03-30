@@ -8,9 +8,7 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 use Laravel\Fortify\RoutePath;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::redirect('/', '/filas');
 
 Route::middleware([
     'auth:sanctum',

@@ -1,6 +1,6 @@
 <?php
 
-use App\Livewire\QueueRealTimeScreen;
+use App\Livewire\QueueScreen;
 use App\Livewire\Queues;
 use App\Livewire\QueueManager;
 use App\Livewire\Reports;
@@ -19,7 +19,8 @@ Route::middleware([
 
     Route::get('/filas', Queues::class)->name('queues');
     Route::get('/filas/{id}', QueueManager::class)->name('queues.show');
-    Route::get('/filas/{id}/real-time', QueueRealTimeScreen::class)->name('queues.real-time');
+    Route::get('/filas/{id}/visor', QueueScreen::class)->name('queues.screen');
+    Route::get('/filas/{id}/totem', \App\Livewire\Totem::class)->name('queues.totem');
 
 
     Route::get('/relatorios', Reports::class)->name('reports');

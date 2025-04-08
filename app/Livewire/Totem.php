@@ -2,20 +2,20 @@
 
 namespace App\Livewire;
 
-use App\Models\Queue;
 use Livewire\Component;
 
-class QueueRealTimeScreen extends Component
+class Totem extends Component
 {
-
-    public Queue $queue;
+    public $queue;
+    public $ticket;
 
     public function mount($id)
     {
         $this->queue = \Auth::user()->supermarket->queues->find($id);
+        $this->ticket = $this->queue->actualTicket()->first();
     }
     public function render()
     {
-        return view('livewire.queue-real-time-screen');
+        return view('livewire.totem')->layout('layouts.guest');
     }
 }

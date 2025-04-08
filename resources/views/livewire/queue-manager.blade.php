@@ -20,8 +20,22 @@
             <x-button class="bg-secondary active:bg-secondary-light">Anterior</x-button>
         </div>
     </div>
-    <a
-            class="text-white fixed start-6 bottom-[5rem] group bg-secondary p-3 rounded-full shadow-lg hover:bg-primary">
+
+    <a href="{{route('queues.totem', ['id'=>$queue->id])}}" wire:navigate
+       class="text-white fixed start-6 bottom-[10rem] group bg-secondary p-3 rounded-full shadow-lg hover:bg-secondary">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+             class="icon icon-tabler icons-tabler-outline icon-tabler-notes">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z"/>
+            <path d="M9 7l6 0"/>
+            <path d="M9 11l6 0"/>
+            <path d="M9 15l4 0"/>
+        </svg>
+    </a>
+
+    <a href="{{route('queues.screen', ['id'=>$queue->id])}}" wire:navigate
+       class="text-white fixed start-6 bottom-[5rem] group bg-secondary p-3 rounded-full shadow-lg hover:bg-primary">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
              class="icon icon-tabler icons-tabler-outline icon-tabler-device-tv">
@@ -30,4 +44,12 @@
             <path d="M16 3l-4 4l-4 -4"/>
         </svg>
     </a>
+
+    <script>
+        $(document).ready(function () {
+            if (document.fullscreenElement) {
+                document.exitFullscreen();
+            }
+        });
+    </script>
 </div>

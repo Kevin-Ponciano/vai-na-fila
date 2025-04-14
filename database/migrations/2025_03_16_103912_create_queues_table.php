@@ -11,7 +11,6 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('supermarket_id')->constrained()->cascadeOnDelete();
             $table->string('name');
-            $table->boolean('is_priority')->default(false);
             $table->timestamps();
         });
     }

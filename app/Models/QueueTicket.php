@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\QueueTicketPriority;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,6 +16,7 @@ class QueueTicket extends Model
         'queue_id',
         'client_id',
         'ticket_number',
+        'priority',
         'status',
         'type',
         'called_at',
@@ -26,14 +28,16 @@ class QueueTicket extends Model
         parent::boot();
 
         static::creating(function ($model) {
-            $model->ticket_number = self::generateTicketNumber($model->queue_id);
+            $priority = $model->priority ?? QueueTicketPriority::NORMAL;
+            $model->ticket_number = self::generateTicketNumber($model->queue_id, $priority);
         });
     }
 
-    static function generateTicketNumber($queueId): int
+    static function generateTicketNumber($queueId, $priority = QueueTicketPriority::NORMAL): int
     {
         $lastTicket = self::where('queue_id', $queueId)
-            ->orderBy('created_at', 'desc')
+            ->where('priority', $priority)
+            ->orderBy('id', 'desc')
             ->first();
         $lastTicketNumber = $lastTicket ? $lastTicket->ticket_number : 0;
         return $lastTicketNumber + 1;

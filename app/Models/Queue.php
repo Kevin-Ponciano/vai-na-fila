@@ -16,7 +16,6 @@ class Queue extends Model
     protected $fillable = [
         'supermarket_id',
         'name',
-        'is_priority',
     ];
 
     public function supermarket(): BelongsTo

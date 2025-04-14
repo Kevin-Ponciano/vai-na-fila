@@ -47,21 +47,10 @@ class DatabaseSeeder extends Seeder
             $queue = Queue::create([
                 'supermarket_id' => $supermarket->id,
                 'name' => fake()->name(),
-                'is_priority' => false,
             ]);
 
             QueueTicket::factory(10)->create([
                 'queue_id' => $queue->id,
-            ]);
-
-            $queuePriority = Queue::create([
-                'supermarket_id' => $supermarket->id,
-                'name' => fake()->name(),
-                'is_priority' => true,
-            ]);
-
-            QueueTicket::factory(10)->create([
-                'queue_id' => $queuePriority->id,
             ]);
 
             $this->createReports($supermarket->id);

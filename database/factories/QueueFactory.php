@@ -16,7 +16,6 @@ class QueueFactory extends Factory
         return [
             'supermarket_id' => Supermarket::factory()->create()->id,
             'name' => $this->faker->name(),
-            'is_priority' => $this->faker->boolean(75),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];

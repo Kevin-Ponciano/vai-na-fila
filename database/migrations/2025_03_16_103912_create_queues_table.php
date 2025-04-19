@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\QueueType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -11,6 +12,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('supermarket_id')->constrained()->cascadeOnDelete();
             $table->string('name');
+            $table->enum('type', QueueType::values());
             $table->timestamps();
         });
     }

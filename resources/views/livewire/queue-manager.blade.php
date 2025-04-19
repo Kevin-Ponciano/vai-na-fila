@@ -56,7 +56,12 @@
     <!-- Scripts -->
     <script src="https://unpkg.com/html5-qrcode"></script>
     <script>
-        let qrScanner;
+        $(document).ready(function () {
+            if (document.fullscreenElement) {
+                document.exitFullscreen();
+            }
+
+            let qrScanner;
 
         function iniciarCamera() {
             const readerElement = document.getElementById('reader');
@@ -84,10 +89,6 @@
             }
         }
 
-        $(document).ready(function () {
-            if (document.fullscreenElement) {
-                document.exitFullscreen();
-            }
         });
     </script>
 </div>

@@ -1,9 +1,10 @@
 <?php
 
-use App\Livewire\QueueScreen;
-use App\Livewire\Queues;
 use App\Livewire\QueueManager;
+use App\Livewire\Queues;
+use App\Livewire\QueueScreen;
 use App\Livewire\Reports;
+use App\Livewire\Totem;
 use App\Livewire\Users;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
@@ -20,7 +21,7 @@ Route::middleware([
     Route::get('/filas', Queues::class)->name('queues');
     Route::get('/filas/{id}', QueueManager::class)->name('queues.show');
     Route::get('/filas/{id}/visor', QueueScreen::class)->name('queues.screen');
-    Route::get('/filas/{id}/totem', \App\Livewire\Totem::class)->name('queues.totem');
+    Route::get('/filas/{id}/totem', Totem::class)->name('queues.totem');
 
 
     Route::get('/relatorios', Reports::class)->name('reports');

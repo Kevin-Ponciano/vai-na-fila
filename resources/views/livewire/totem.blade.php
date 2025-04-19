@@ -42,7 +42,6 @@
     <script>
         function mostrarTelaQR(tipo) {
             document.getElementById('tela-inicial').classList.add('hidden');
-            valor
             document.getElementById('tela-qr').classList.remove('hidden');
             document.getElementById('tipo-senha').textContent = `Senha ${tipo}`;
         }

@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $supermarkets = Supermarket::factory(5)->create();
+        $supermarkets = Supermarket::factory(2)->create();
 
         AdminUser::create([
             'name' => 'admin',

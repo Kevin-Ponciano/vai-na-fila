@@ -60,5 +60,8 @@ class Supermarket extends Model
         return $this->hasMany(Report::class);
     }
 
-
+    static function createQueuesDefaults($supermarket): void
+    {
+        
+    }
 }

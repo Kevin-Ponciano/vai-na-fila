@@ -1,9 +1,9 @@
 <div class="bg-primary h-screen flex flex-col justify-center items-center">
-    <div class="text-[9rem] text-[#ffffff] font-bold text-center">SENHA: <span
-            id="senha">{{$ticket->ticket_number}}</span></div>
+    <div class="text-[9rem] text-[#ffffff] font-bold text-center">
+        SENHA: <span id="senha">{{ $ticket->ticket_number ?? '000' }}</span>
+    </div>
 
-
-    <a href="{{route('queues.show', ['id'=> $queue->id])}}" wire:navigate
+    <a href="{{ route('queues.show', ['id'=> $queue->id]) }}" wire:navigate
        class="text-white fixed start-6 bottom-[5rem] group bg-secondary p-3 rounded-full shadow-lg hover:bg-secondary">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -13,9 +13,22 @@
             <path d="M16 3l-4 4l-4 -4"/>
         </svg>
     </a>
+
     <script>
         $(document).ready(function () {
-            document.documentElement.requestFullscreen()
+            // 1️⃣ fullscreen automático
+            if (document.fullscreenEnabled) {
+                document.documentElement
+                    .requestFullscreen()
+                    .catch(err => {
+                    });
+            }
+
+            // 2️⃣ registra o listener de broadcast via Echo
+            Echo.private('queue.{{ $queue->id }}')
+                .listen('.ticket.called', function (payload) {
+                    $('#senha').text(payload.ticket.ticket_number);
+                });
         });
     </script>
 </div>

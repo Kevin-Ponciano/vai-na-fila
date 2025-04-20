@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Enums\QueueTicketPriority;
 use App\Enums\QueueTicketStatus;
+use App\Events\QueueTicketCalledEvent;
 use App\Models\Queue;
 use App\Models\QueueTicket;
 use Auth;
@@ -33,7 +34,7 @@ class QueueManager extends Component
     /**
      * Sempre busca o ticket atual diretamente da model (fonte única da verdade).
      */
-    private function refreshCurrentTicket(): void
+    public function refreshCurrentTicket(): void
     {
         $this->queue->refresh();               // garante dados recentes da relação
         $this->currentTicket = $this->queue->currentTicket();
@@ -129,8 +130,7 @@ class QueueManager extends Component
      */
     private function announceTicket(QueueTicket $ticket): void
     {
-        // se desejar tocar som apenas no painel público,
-        // inclua lógica no listener do evento.
+        broadcast(new QueueTicketCalledEvent($ticket));
     }
 
     /**

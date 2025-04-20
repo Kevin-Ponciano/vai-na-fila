@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('queue_id')->constrained()->cascadeOnDelete();
             $table->foreignId('client_id')->nullable()->constrained()->nullOnDelete();
-            $table->integer('ticket_number');
+            $table->string('ticket_number');
             $table->enum('priority', QueueTicketPriority::values())->default(QueueTicketPriority::NORMAL);
             $table->enum('status', QueueTicketStatus::values())->default(QueueTicketStatus::WAITING);
             $table->enum('type', QueueTicketType::values())->default(QueueTicketType::QRCODE);

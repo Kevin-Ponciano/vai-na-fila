@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Enums\QueueTicketStatus;
 use App\Enums\UserRole;
 use App\Models\AdminUser;
-use App\Models\Queue;
 use App\Models\QueueTicket;
 use App\Models\Report;
 use App\Models\Supermarket;
@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
 
         AdminUser::create([
             'name' => 'admin',
-            'email'=>'admin@admin',
+            'email' => 'admin@admin',
             'password' => bcrypt('123'),
         ]);
 
@@ -44,22 +44,33 @@ class DatabaseSeeder extends Seeder
                 'role' => UserRole::ADMIN,
             ]);
 
-            $queue = Queue::create([
-                'supermarket_id' => $supermarket->id,
-                'name' => fake()->name(),
-            ]);
+            $queues = $supermarket->queues;
+            $timestamp = Carbon::now();
+            foreach ($queues as $queue) {
+                // Cria o chamado primeiro (último a ser inserido na fila visualmente)
+                QueueTicket::factory()->create([
+                    'queue_id' => $queue->id,
+                    'status' => QueueTicketStatus::CALLED,
+                    'created_at' => $timestamp
+                ]);
 
-            QueueTicket::factory(10)->create([
-                'queue_id' => $queue->id,
-            ]);
 
+                for ($i = 0; $i < 9; $i++) {
+                    $timestamp->addMinutes(2);
+                    QueueTicket::factory()->create([
+                        'queue_id' => $queue->id,
+                        'status' => QueueTicketStatus::WAITING,
+                        'created_at' => $timestamp
+                    ]);
+                }
+            }
             $this->createReports($supermarket->id);
         }
     }
 
     private function createReports($supermarketId): void
     {
-        $startDate = Carbon::now()->subYears(3);
+        $startDate = Carbon::now()->startOfYear();
         $endDate = Carbon::now();
 
         while ($startDate < $endDate) {

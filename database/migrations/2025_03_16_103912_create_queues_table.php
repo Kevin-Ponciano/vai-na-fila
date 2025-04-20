@@ -13,6 +13,8 @@ return new class extends Migration {
             $table->foreignId('supermarket_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->enum('type', QueueType::values());
+            $table->string('image_path')->nullable();
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }

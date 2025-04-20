@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\QueueType;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -29,6 +30,29 @@ class Supermarket extends Model
     protected $casts = [
         'config' => 'array',
     ];
+
+    static function boot(): void
+    {
+        parent::boot();
+
+        static::created(function ($supermarket) {
+            self::createQueuesDefaults($supermarket);
+        });
+    }
+
+    static function createQueuesDefaults($supermarket): void
+    {
+        $queues = QueueType::cases();
+        foreach ($queues as $queue) {
+            Queue::create([
+                'supermarket_id' => $supermarket->id,
+                'name' => $queue->name(),
+                'type' => $queue->value,
+                'description' => $queue->description(),
+            ]);
+        }
+    }
+
 
     public function users(): HasMany
     {
@@ -58,10 +82,5 @@ class Supermarket extends Model
     public function reports(): HasMany|Supermarket
     {
         return $this->hasMany(Report::class);
-    }
-
-    static function createQueuesDefaults($supermarket): void
-    {
-        
     }
 }

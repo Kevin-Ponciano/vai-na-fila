@@ -13,4 +13,7 @@ enum QueueTicketStatus: string
     case CALLED = 'called';
     CASE EXPIRED = 'expired';
     case CANCELLED = 'cancelled';
+
+    //case CALLING = 'calling';
+    //case IN_SERVICE = 'in_service';
 }

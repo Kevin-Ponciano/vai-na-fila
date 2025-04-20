@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 class QueueTicket extends Model
 {
@@ -23,7 +24,7 @@ class QueueTicket extends Model
         'expired_at',
     ];
 
-    static function boot()
+    static function boot(): void
     {
         parent::boot();
 
@@ -33,14 +34,19 @@ class QueueTicket extends Model
         });
     }
 
-    static function generateTicketNumber($queueId, $priority = QueueTicketPriority::NORMAL): int
+    static function generateTicketNumber($queueId, $priority = QueueTicketPriority::NORMAL): string
     {
+        $queuePrefix = Str::upper(Str::substr($priority, 0, 2));
         $lastTicket = self::where('queue_id', $queueId)
             ->where('priority', $priority)
             ->orderBy('id', 'desc')
             ->first();
-        $lastTicketNumber = $lastTicket ? $lastTicket->ticket_number : 0;
-        return $lastTicketNumber + 1;
+        $lastTicketNumber = $lastTicket
+            ? Str::after($lastTicket->ticket_number, $queuePrefix)
+            : 0;
+
+        $nextTicketNumber = (int)$lastTicketNumber + 1;
+        return $queuePrefix . str_pad($nextTicketNumber, 3, '0', STR_PAD_LEFT);
     }
 
     public function client(): BelongsTo

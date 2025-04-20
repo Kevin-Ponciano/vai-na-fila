@@ -6,6 +6,6 @@ use ArchTech\Enums\Meta\MetaProperty;
 use Attribute;
 
 #[Attribute]
-class Image extends MetaProperty
+class Name extends MetaProperty
 {
 }

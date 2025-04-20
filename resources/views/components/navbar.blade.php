@@ -9,7 +9,7 @@
                 class="font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 type="button">
             <img
-                src="https://s3-alpha-sig.figma.com/img/fd79/50e9/a98d30cb57cc258d9633c2b92a272ca7?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=Quh6zSPbqRKTGajEpkn~EkbXglnX3c2etentVaFuRFgI3PS~gnzoai3onGO0622F7eXQi9knLD3lBEGvN3~9w05ap1ENYEYfzMO68G85wgWZDCGr0KcOtX6pB1EDMfeGmZeCjpCbFmQcQ1HK30HvXrjlqKAy4wgwDIhoH8ishDxGKYa~fLJan3awN7aQPIqliTnFLaOUAzAZ3zcx6M7S2jfBaXbQ39EmD0ZhXHQJa8xmjnoZsQx6m32y3xFUm31BXg5eFaMtArEboR1SJg5I7HlddY0k-MxoSM~Cqo8Si66rgNH760KoDl6npKPHZXeynJLKR8-~HpbhnBzCKnpsew__"
+                src="{{asset('assets/img/carone.png')}}"
                 alt="Logo" class="h-12 w-12 rounded-full object-cover border-2 border-white">
         </button>
 

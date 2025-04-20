@@ -21,8 +21,8 @@ class QueueTicketFactory extends Factory
             'priority' => $this->faker->randomElement(QueueTicketPriority::values()),
             'status' => $this->faker->randomElement(QueueTicketStatus::values()),
             'type' => $this->faker->randomElement(QueueTicketType::values()),
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
+            'created_at' => $this->faker->dateTimeBetween('+3 minutes', '+1 hour'),
+            'updated_at' => $this->faker->dateTimeBetween('+3 minutes', '+1 hour'),
         ];
     }
 

@@ -12,7 +12,7 @@ class Totem extends Component
     public function mount($id)
     {
         $this->queue = \Auth::user()->supermarket->queues->find($id);
-        $this->ticket = $this->queue->actualTicket()->first();
+        $this->ticket = $this->queue->currentTicket();
     }
     public function render()
     {

@@ -6,6 +6,7 @@ use App\Livewire\QueueScreen;
 use App\Livewire\Reports;
 use App\Livewire\Totem;
 use App\Livewire\Users;
+use App\Models\Supermarket;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 use Laravel\Fortify\RoutePath;

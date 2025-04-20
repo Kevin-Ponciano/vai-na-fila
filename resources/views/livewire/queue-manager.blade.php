@@ -8,18 +8,25 @@
             <!-- Senha atual -->
             <div class="text-center">
                 <span class="text-primary font-bold text-4xl">Senha:</span>
-                <div class="bg-gray-300 text-primary-dark font-bold rounded-lg p-2 text-5xl mt-7">
-                    001
-                </div>
+                @if($currentTicket)
+                    <div class="bg-gray-300 text-primary-dark font-bold rounded-lg p-2 text-5xl mt-7">
+                        {{$currentTicket->ticket_number}}
+                    </div>
+                @else
+                    <div class="bg-gray-300 text-primary-dark font-bold rounded-lg p-2 text-5xl mt-7">
+                        000
+                    </div>
+                @endif
             </div>
 
             <!-- Botão próximo -->
-            <x-button class="py-3 text-[1.5rem]">Próximo</x-button>
+            <x-button wire:click="callNextTicket"  class="py-3 text-[1.5rem]">Próximo</x-button>
         </div>
 
         <!-- Botão anterior -->
         <div class="flex justify-center mt-10">
-            <x-button class="bg-secondary active:bg-secondary-light">Anterior</x-button>
+            <x-button wire:click="callPreviousTicket" wire:confirm="Você tem certeza que deseja voltar uma senha?"
+                      class="bg-secondary active:bg-secondary-light">Anterior</x-button>
         </div>
     </div>
 

@@ -14,7 +14,7 @@ class ReportFactory extends Factory
     public function definition(): array
     {
         return [
-            'supermarket_id' => Supermarket::factory()->create()->id,
+            'supermarket_id' => null,
             'avg_wait_time' => $this->faker->numberBetween(1, 60), // Average wait time in minutes
             'peak_hour' => $this->faker->dateTimeBetween('-1 month', 'now'), // Peak hour within the last month
             'created_at' => Carbon::now(),

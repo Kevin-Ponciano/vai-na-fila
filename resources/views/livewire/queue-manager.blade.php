@@ -32,14 +32,6 @@
         </div>
     </div>
 
-    <!-- Leitor de QR Code (inicialmente oculto) -->
-    <div class="mt-10 flex flex-col items-center">
-        <x-button onclick="iniciarCamera()" class="mb-4 bg-blue-700 text-white">Abrir Câmera para Teste QR Code
-        </x-button>
-        <div id="reader" class="hidden w-full max-w-md mx-auto"></div>
-        <div id="result" class="mt-4 text-center text-blue-800 font-bold text-lg"></div>
-    </div>
-
     <!-- Atalhos flutuantes -->
     <a href="{{route('queues.totem', ['id'=>$queue->id])}}" wire:navigate
        class="text-white fixed start-6 bottom-[10rem] bg-secondary p-3 rounded-full shadow-lg hover:bg-secondary">
@@ -63,40 +55,10 @@
         </svg>
     </a>
 
-    <!-- Scripts -->
-    <script src="https://unpkg.com/html5-qrcode"></script>
     <script>
         $(document).ready(function () {
             if (document.fullscreenElement) {
                 document.exitFullscreen();
-            }
-
-            let qrScanner;
-
-            function iniciarCamera() {
-                const readerElement = document.getElementById('reader');
-                readerElement.classList.remove('hidden');
-
-                if (!qrScanner) {
-                    qrScanner = new Html5Qrcode("reader");
-
-                    qrScanner.start(
-                        {facingMode: "environment"},
-                        {
-                            fps: 10,
-                            qrbox: 250
-                        },
-                        qrCodeMessage => {
-                            document.getElementById('result').innerText = "QR Code detectado: " + qrCodeMessage;
-                            qrScanner.stop();
-                        },
-                        errorMessage => {
-                            console.warn(errorMessage);
-                        }
-                    ).catch(err => {
-                        console.error("Erro ao iniciar câmera:", err);
-                    });
-                }
             }
         });
     </script>

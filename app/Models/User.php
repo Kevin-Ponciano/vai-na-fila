@@ -2,16 +2,16 @@
 
 namespace App\Models;
 
-use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use App\Enums\UserRole;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class User extends Authenticatable
 {
@@ -58,6 +58,22 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
+    public function supermarket(): BelongsTo
+    {
+        return $this->belongsTo(Supermarket::class);
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === UserRole::ADMIN;
+    }
+
+    public function isSupermarketUser(): bool
+    {
+        return ($this->role === UserRole::ADMIN->value)
+            || ($this->role === UserRole::OPERATOR->value);
+    }
+
     /**
      * Get the attributes that should be cast.
      *
@@ -69,15 +85,5 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
-    }
-
-    public function supermarket(): BelongsTo
-    {
-        return $this->belongsTo(Supermarket::class);
-    }
-
-    public function isAdmin(): bool
-    {
-        return $this->role === UserRole::ADMIN;
     }
 }

@@ -14,13 +14,13 @@ export default {
     theme: {
         colors: {
             primary: {
-                light: "#BDEDFB", // Azul Claro - Suavidade e Acessibilidade
-                DEFAULT: "#007BFF", // Azul Principal - Confiança e Profissionalismo
+                light: "#BBDEFB",//"#BDEDFB", // Azul Claro - Suavidade e Acessibilidade
+                DEFAULT: "#1565C0",//"#007BFF", // Azul Principal - Confiança e Profissionalismo
                 dark: "#1565C0", // Azul Escuro - Profundidade e Seriedade
             },
             secondary: {
                 light: "#FFE082", // Laranja Claro - Otimismo e Destaque Suave
-                DEFAULT: "#FF6F00", // Laranja Principal - Energia e Dinamismo
+                DEFAULT: "#FFA000",//"#FF6F00", // Laranja Principal - Energia e Dinamismo
                 dark: "#E65100", // Laranja Escuro - Força e Impacto
             },
             neutral: {

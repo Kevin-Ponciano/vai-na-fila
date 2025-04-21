@@ -24,11 +24,21 @@
 <x-banner/>
 <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
     {{--    @livewire('navigation-menu')--}}
-    <x-navbar/>
+    @if(Auth::user()?->isSupermarketUser())
+        <x-navbar-supermarket/>
+    @else
+        <x-navbar-client/>
+    @endif
     <main class="pb-[3.5rem]">
         {{ $slot }}
     </main>
-    <x-footer/>
+
+    @if(Auth::user()?->isSupermarketUser())
+        <x-footer-supermarket/>
+    @else
+        <x-footer-client/>
+    @endif
+
     <x-scroll-to-top/>
 </div>
 

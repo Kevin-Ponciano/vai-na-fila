@@ -20,19 +20,22 @@
             </div>
 
             <!-- Botão próximo -->
-            <x-button wire:click="callNextTicket"  class="py-3 text-[1.5rem]">Próximo</x-button>
+            <x-button wire:click="callNextTicket" class="py-3 text-[1.5rem]">Próximo</x-button>
         </div>
 
         <!-- Botão anterior -->
         <div class="flex justify-center mt-10">
-            <x-button wire:click="callPreviousTicket" wire:confirm="Você tem certeza que deseja voltar uma senha?"
-                      class="bg-secondary active:bg-secondary-light">Anterior</x-button>
+            <x-button wire:click="callPreviousTicket"
+                      {{--                      wire:confirm="Você tem certeza que deseja voltar uma senha?"--}}
+                      class="bg-secondary active:bg-secondary-light">Anterior
+            </x-button>
         </div>
     </div>
 
     <!-- Leitor de QR Code (inicialmente oculto) -->
     <div class="mt-10 flex flex-col items-center">
-        <x-button onclick="iniciarCamera()" class="mb-4 bg-blue-700 text-white">Abrir Câmera para Teste QR Code</x-button>
+        <x-button onclick="iniciarCamera()" class="mb-4 bg-blue-700 text-white">Abrir Câmera para Teste QR Code
+        </x-button>
         <div id="reader" class="hidden w-full max-w-md mx-auto"></div>
         <div id="result" class="mt-4 text-center text-blue-800 font-bold text-lg"></div>
     </div>
@@ -70,32 +73,31 @@
 
             let qrScanner;
 
-        function iniciarCamera() {
-            const readerElement = document.getElementById('reader');
-            readerElement.classList.remove('hidden');
+            function iniciarCamera() {
+                const readerElement = document.getElementById('reader');
+                readerElement.classList.remove('hidden');
 
-            if (!qrScanner) {
-                qrScanner = new Html5Qrcode("reader");
+                if (!qrScanner) {
+                    qrScanner = new Html5Qrcode("reader");
 
-                qrScanner.start(
-                    { facingMode: "environment" },
-                    {
-                        fps: 10,
-                        qrbox: 250
-                    },
-                    qrCodeMessage => {
-                        document.getElementById('result').innerText = "QR Code detectado: " + qrCodeMessage;
-                        qrScanner.stop();
-                    },
-                    errorMessage => {
-                        console.warn(errorMessage);
-                    }
-                ).catch(err => {
-                    console.error("Erro ao iniciar câmera:", err);
-                });
+                    qrScanner.start(
+                        {facingMode: "environment"},
+                        {
+                            fps: 10,
+                            qrbox: 250
+                        },
+                        qrCodeMessage => {
+                            document.getElementById('result').innerText = "QR Code detectado: " + qrCodeMessage;
+                            qrScanner.stop();
+                        },
+                        errorMessage => {
+                            console.warn(errorMessage);
+                        }
+                    ).catch(err => {
+                        console.error("Erro ao iniciar câmera:", err);
+                    });
+                }
             }
-        }
-
         });
     </script>
 </div>

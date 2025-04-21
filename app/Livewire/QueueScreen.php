@@ -9,7 +9,7 @@ use Livewire\Component;
 class QueueScreen extends Component
 {
 
-    public QueueTicket $ticket;
+    public ?QueueTicket $ticket;
     public Queue $queue;
 
     public function mount($id)

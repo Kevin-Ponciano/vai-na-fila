@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Client;
 
 use Livewire\Component;
 
@@ -14,6 +14,6 @@ class PhoneNumberRegister extends Component
     }
     public function render()
     {
-        return view('livewire.phone-number-register');
+        return view('livewire.phone-number-register')->layout('layouts.client');
     }
 }

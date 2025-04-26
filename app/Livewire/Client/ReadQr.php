@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Client;
 
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -17,6 +17,6 @@ class ReadQr extends Component
 
     public function render()
     {
-        return view('livewire.read-qr');
+        return view('livewire.read-qr')->layout('layouts.client');
     }
 }

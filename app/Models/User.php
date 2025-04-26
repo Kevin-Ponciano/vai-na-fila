@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\UserRole;
+use App\Enums\UserType;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -68,10 +69,9 @@ class User extends Authenticatable
         return $this->role === UserRole::ADMIN;
     }
 
-    public function isSupermarketUser(): bool
+        public function userType(): string
     {
-        return ($this->role === UserRole::ADMIN->value)
-            || ($this->role === UserRole::OPERATOR->value);
+        return UserType::SUPERMARKET->value;
     }
 
     /**

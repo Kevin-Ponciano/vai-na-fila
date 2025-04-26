@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Client;
 
 use App\Models\Queue;
 use Livewire\Component;
@@ -15,6 +15,6 @@ class QueuePosition extends Component
     }
     public function render()
     {
-        return view('livewire.queue-position');
+        return view('livewire.queue-position')->layout('layouts.client');
     }
 }

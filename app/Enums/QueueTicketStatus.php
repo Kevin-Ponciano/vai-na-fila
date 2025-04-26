@@ -9,6 +9,7 @@ enum QueueTicketStatus: string
 {
     use Names, Values;
 
+    case PROCESSING = 'processing';
     case WAITING = 'waiting';
     case CALLED = 'called';
     CASE EXPIRED = 'expired';

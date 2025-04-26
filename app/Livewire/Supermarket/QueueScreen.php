@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Supermarket;
 
 use App\Models\Queue;
 use App\Models\QueueTicket;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Supermarket;
 
 use App\Enums\QueueTicketPriority;
 use App\Enums\QueueTicketStatus;

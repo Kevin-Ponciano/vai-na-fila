@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+@php use App\Enums\UserType; @endphp
+
+    <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
@@ -23,22 +25,7 @@
 <body class="font-sans antialiased">
 <x-banner/>
 <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-    {{--    @livewire('navigation-menu')--}}
-    @if(Auth::user()?->isSupermarketUser())
-        <x-navbar-supermarket/>
-    @else
-        <x-navbar-client/>
-    @endif
-    <main class="pb-[3.5rem]">
-        {{ $slot }}
-    </main>
-
-    @if(Auth::user()?->isSupermarketUser())
-        <x-footer-supermarket/>
-    @else
-        <x-footer-client/>
-    @endif
-
+    {{ $slot }}
     <x-scroll-to-top/>
 </div>
 

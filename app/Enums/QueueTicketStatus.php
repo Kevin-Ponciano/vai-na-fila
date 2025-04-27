@@ -9,12 +9,15 @@ enum QueueTicketStatus: string
 {
     use Names, Values;
 
-    case PROCESSING = 'processing';
-    case WAITING = 'waiting';
-    case CALLED = 'called';
-    CASE EXPIRED = 'expired';
-    case CANCELLED = 'cancelled';
+    case PROCESSING = 'processing';   // (#1) Ticket recém-gerado: criando QR / imprimindo
+    case WAITING = 'waiting';      // (#2) Na fila, aguardando ser chamado
+    case CALLING = 'calling';      // (#3) Display/painel está chamando o número
+    case IN_SERVICE = 'in_service';   // (#4) Cliente atendeu, atendimento em andamento
+    case CALLED = 'called';       // (#5) Atendimento concluído com sucesso
 
-    //case CALLING = 'calling';
-    //case IN_SERVICE = 'in_service';
+    /* Estados de saída sem atendimento */
+    case EXPIRED = 'expired';      // Timeout (cliente não apareceu a tempo)
+    case CANCELLED = 'cancelled';    // Operador/cliente cancelou antes de ser atendido
+
+
 }

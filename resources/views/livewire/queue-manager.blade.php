@@ -33,7 +33,7 @@
     </div>
 
     <!-- Atalhos flutuantes -->
-    <a href="{{route('queues.totem', ['id'=>$queue->id])}}" wire:navigate
+    <a href="{{route('queues.totem', ['id'=>$queue->id])}}"
        class="text-white fixed start-6 bottom-[10rem] bg-secondary p-3 rounded-full shadow-lg hover:bg-secondary">
         <!-- Ícone de totem -->
         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" fill="none" stroke="currentColor">
@@ -45,7 +45,7 @@
         </svg>
     </a>
 
-    <a href="{{route('queues.screen', ['id'=>$queue->id])}}" wire:navigate
+    <a href="{{route('queues.screen', ['id'=>$queue->id])}}"
        class="text-white fixed start-6 bottom-[5rem] bg-secondary p-3 rounded-full shadow-lg hover:bg-primary">
         <!-- Ícone de TV -->
         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" fill="none" stroke="currentColor">

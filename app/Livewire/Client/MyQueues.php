@@ -2,19 +2,18 @@
 
 namespace App\Livewire\Client;
 
-use App\Models\Queue;
+use App\Enums\QueueTicketStatus;
+use Auth;
 use Livewire\Component;
 
 class MyQueues extends Component
 {
-    public $queues = [];
+    public $tickets = [];
 
     public function mount()
     {
-        $this->queues = Queue::limit(3)->get();
-
-        debug(\Auth::user());
-        debug(session()->all());
+        $this->tickets = Auth::user()->queueTickets()->where('status', QueueTicketStatus::WAITING->value)
+            ->with('queue')->get();
     }
 
     public function render()

@@ -40,11 +40,14 @@ Route::prefix('supermarket')->middleware([
 });
 
 Route::prefix('cliente')->middleware(ClientAuthMiddleware::class)->group(function () {
-    Route::get('/receber-notificacao', QueueNotificationAsk::class)->name('queue.notification.ask');
-    Route::get('/registrar-telefone', PhoneNumberRegister::class)->name('phone-number.register');
-    Route::get('/fila/{id}', QueuePosition::class)->name('queue.position');
-    Route::get('/minhas-filas', MyQueues::class)->name('my-queues');
-    Route::get('/ler-qrcode', ReadQr::class)->name('read-qr');
+    Route::get('receber-notificacao', QueueNotificationAsk::class)->name('queue.notification.ask');
+    Route::get('registrar-telefone', PhoneNumberRegister::class)->name('phone-number.register');
+    Route::get('fila/{id}', QueuePosition::class)->name('queue.position');
+    Route::get('minhas-filas', MyQueues::class)->name('my-queues');
+    Route::get('ler-qrcode', ReadQr::class)->name('read-qr');
+    Route::get('entrar-fila/{token}', [ClientAuthController::class, 'joinQueue'])
+        ->withoutMiddleware(ClientAuthMiddleware::class)
+        ->name('queue.join');
 });
 
 Route::get('cliente/login', [ClientAuthController::class, 'authenticate'])->name('client.login');

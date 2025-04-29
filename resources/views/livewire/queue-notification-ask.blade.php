@@ -8,12 +8,12 @@
 
     <div class="flex-grow flex flex-col items-center justify-center">
         <div class="flex flex-col w-full max-w-xs">
-            <a href="{{route('phone-number.register')}}" wire:navigate class="mb-4">
+            <a href="{{route('phone-number.register',['id'=>$queueTicketId])}}" wire:navigate class="mb-4">
                 <x-button class="w-[75%] text-[19px]">
                     Sim
                 </x-button>
             </a>
-            <a href="{{route('queue.position',['id'=>1])}}" wire:navigate>
+            <a href="{{route('queue.position',['id'=>$queueTicketId])}}" wire:navigate>
                 <x-danger-button class="w-[75%]">
                     Não, vou vigiar no aplicativo
                 </x-danger-button>

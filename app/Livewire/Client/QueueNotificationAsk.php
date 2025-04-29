@@ -7,17 +7,17 @@ use Livewire\Component;
 
 class QueueNotificationAsk extends Component
 {
-    public $queueTicket;
-    public $beNotified;
+    public $queueTicketId;
+    public $beNotified = false;
 
     public function mount()
     {
         $user = Auth::user();
-        $queueTicketId = request('queue_ticket_id',0);
-
-        if ($user->phone)
+        $this->queueTicketId = request('queue_ticket_id',0);
+        $beNotified = (bool)$user->phone;
+        if ($beNotified)
            return redirect()->route('queue.position', [
-                'id' => $queueTicketId
+                'id' => $this->queueTicketId,
             ]);
     }
 

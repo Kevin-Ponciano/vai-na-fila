@@ -51,7 +51,7 @@ class QueueManager extends Component
 
             /* 1. PRIORITY (se ainda não bateu a cota) */
             if ($priorityCalls < self::PRIORITY_QUOTA &&
-                ($ticket = $this->nextWaiting(QueueTicketPriority::PRIORITY))) {
+                ($ticket = $this->nextWaiting(QueueTicketPriority::PRIORITY->value))) {
 
                 $this->callTicket($ticket);
                 Cache::increment($counterKey);
@@ -59,14 +59,14 @@ class QueueManager extends Component
             }
 
             /* 2. NORMAL */
-            if ($ticket = $this->nextWaiting(QueueTicketPriority::NORMAL)) {
+            if ($ticket = $this->nextWaiting(QueueTicketPriority::NORMAL->value)) {
                 $this->callTicket($ticket);
                 Cache::put($counterKey, 0);       // zera cota
                 return;
             }
 
             /* 3. PRIORITY de novo (quando não há NORMAL) */
-            if ($ticket = $this->nextWaiting(QueueTicketPriority::PRIORITY)) {
+            if ($ticket = $this->nextWaiting(QueueTicketPriority::PRIORITY->value)) {
                 $this->callTicket($ticket);
                 Cache::increment($counterKey);
             }
@@ -95,10 +95,10 @@ class QueueManager extends Component
     /**
      * Próximo ticket WAITING de uma prioridade (com lock pessimista).
      */
-    private function nextWaiting(QueueTicketPriority $priority): ?QueueTicket
+    private function nextWaiting($priority): ?QueueTicket
     {
         return $this->queue->queueTickets()
-            ->where('status', QueueTicketStatus::WAITING)
+            ->where('status', QueueTicketStatus::WAITING->value)
             ->where('priority', $priority)
             ->orderBy('created_at')
             ->lockForUpdate()

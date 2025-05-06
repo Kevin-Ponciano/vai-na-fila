@@ -32,6 +32,6 @@ class PhoneNumberRegister extends Component
     }
     public function render()
     {
-        return view('livewire.phone-number-register')->layout('layouts.client');
+        return view('livewire.phone-number-register')->layout('layouts.guest');
     }
 }

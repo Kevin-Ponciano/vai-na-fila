@@ -3,7 +3,6 @@
 namespace App\Events;
 
 use App\Models\QueueTicket;
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -14,20 +13,20 @@ class QueueTicketCalledEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public int $queueId;
     public QueueTicket $ticket;
 
     public function __construct(QueueTicket $ticket)
     {
-        // passe apenas o que o telão precisa renderizar
-        $this->queueId = $ticket->queue_id;
-        $this->ticket = $ticket;
+        $this->ticket = $ticket->load('queue');
     }
 
     /** Canal público onde o telão vai “escutar” */
-    public function broadcastOn(): Channel
+    public function broadcastOn(): array
     {
-        return new PrivateChannel("queue.{$this->queueId}");
+        return [
+            new PrivateChannel("queue.{$this->ticket->queue_id}"),
+            new PrivateChannel("client.{$this->ticket->client_id}.call"),
+        ];
     }
 
     /** Payload extra — aqui você pode adicionar campos adicionais */

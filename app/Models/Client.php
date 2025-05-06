@@ -16,7 +16,7 @@ class Client extends Authenticatable
         'phone',
     ];
 
-    public function queueTickets(): HasMany|Client
+    public function queueTickets(): HasMany
     {
         return $this->hasMany(QueueTicket::class);
     }

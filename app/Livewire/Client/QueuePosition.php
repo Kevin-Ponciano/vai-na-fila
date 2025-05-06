@@ -10,12 +10,15 @@ use Livewire\Component;
 
 class QueuePosition extends Component
 {
-    public ?QueueTicket $ticket;
+    public  $ticket;
     public Queue $queue;
 
     public function mount($id)
     {
-        $this->ticket = Auth::user()->queueTickets()->find($id);
+        $this->ticket = Auth::user()->queueTickets()
+            ->whereKey($id)
+            ->where('status', QueueTicketStatus::WAITING->value)
+            ->first();
         if (!$this->ticket) {
             return redirect()->route('my-queues');
         }

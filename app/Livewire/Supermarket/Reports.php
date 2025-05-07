@@ -58,7 +58,7 @@ class Reports extends Component
             })
             ->toArray();
 
-        $nome fichier = 'relatorio_' . str_replace('-', '_', $yearMonth) . '.xlsx';
+        $nomeArquivo = 'relatorio_' . str_replace('-', '_', $yearMonth) . '.xlsx';
 
         $exportador = new class($dados) implements FromArray, WithHeadings {
             protected $dados;

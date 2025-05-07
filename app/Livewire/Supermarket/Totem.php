@@ -20,6 +20,7 @@ class Totem extends Component
     /* -----------------------------------------------------------------
      |  Constantes de configuração
      |------------------------------------------------------------------*/
+    private const WAIT_TIME_MIN = 5;    // quanto tempo esperamos pelo QR-Code
     private const TOKEN_TTL_MIN = 10;   // expiração do QR-code em minutos
     private const TOKEN_LENGTH = 12;   // caracteres do token
     private const LOCK_TTL_SEC = 3;    // quanto tempo o lock fica ativo
@@ -123,7 +124,7 @@ class Totem extends Component
      |  Helpers privados
      |------------------------------------------------------------------*/
 
-    private function clearState(): void
+    public function clearState(): void
     {
         $this->prioritySelected = null;
         $this->queueTicketId = null;

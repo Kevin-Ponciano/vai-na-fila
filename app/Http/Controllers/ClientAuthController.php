@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\QueueTicketStatus;
+use App\Events\QueueTicketGeneratedEvent;
 use App\Models\Client;
 use App\Models\QueueTicket;
 use Auth;
@@ -13,13 +14,14 @@ class ClientAuthController extends Controller
     public function joinQueue($token)
     {
         $ticketId = Cache::get($token);
-        if(!$ticketId) {
+        if (!$ticketId) {
             return redirect()->route('my-queues');
         }
         $ticket = QueueTicket::whereKey($ticketId)
             ->where('status', QueueTicketStatus::PROCESSING->value)
             ->firstOrFail();
 
+        broadcast(new QueueTicketGeneratedEvent($ticket));
         $user = $this->authenticate();
 
         $ticket->update([

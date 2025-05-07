@@ -83,7 +83,7 @@
             baseOptions: {
                 width: 450,
                 height: 450,
-                colorDark:  "#1c83f4",
+                colorDark: "#1c83f4",
                 colorLight: "#ffffff",
                 correctLevel: QRCode.CorrectLevel.H,
                 logo: "{{ asset('assets/img/logo.svg') }}",
@@ -93,7 +93,7 @@
 
             init() {
                 /* Evento Livewire fornece a URL: */
-                Livewire.on('generateQrCode', ({ url }) => {
+                Livewire.on('generateQrCode', ({url}) => {
                     this.draw(url);
                 });
 
@@ -104,7 +104,7 @@
                 /* garante que o canvas exista */
                 this.$nextTick(() => {
                     this.$refs.canvas.innerHTML = '';
-                    new QRCode(this.$refs.canvas, { ...this.baseOptions, text });
+                    new QRCode(this.$refs.canvas, {...this.baseOptions, text});
                 });
             },
 
@@ -119,3 +119,13 @@
         Alpine.data('qrComponent', qrComponent)
     );
 </script>
+@script
+<script>
+    $(document).ready(function () {
+        Echo.private('queue.{{ $queue->id }}')
+            .listen('.ticket.generated', function (payload) {
+                $wire.clearState()
+            });
+    });
+</script>
+@endscript

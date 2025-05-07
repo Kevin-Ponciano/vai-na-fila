@@ -38,7 +38,7 @@
                     window.location.href = "{{ route('queue.calling', ['id' => 'PLACEHOLDER']) }}".replace('PLACEHOLDER', id);
                 };
 
-                window.location.href = '{{ route('queue.calling', ['id' => 'PLACEHOLDER']) }}'.replace('PLACEHOLDER', id);
+                //window.location.href = '{{ route('queue.calling', ['id' => 'PLACEHOLDER']) }}'.replace('PLACEHOLDER', id);
             }
 
             const expired = (id, ticketNumber, queueName) => {

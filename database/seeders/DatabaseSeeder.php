@@ -56,7 +56,7 @@ class DatabaseSeeder extends Seeder
                     ]);
                 }
             }
-            $this->createReports($supermarket->id);
+            //$this->createReports($supermarket->id);
         }
     }
 

@@ -36,6 +36,14 @@ class Queue extends Model
     public function currentTicket()
     {
         return $this->queueTickets()
+            ->whereIn('status', [QueueTicketStatus::IN_SERVICE, QueueTicketStatus::CALLING])
+            ->orderByDesc('called_at')   // ← usa o instante de chamada
+            ->first();
+    }
+
+    public function lastCalledTicket()
+    {
+        return $this->queueTickets()
             ->where('status', QueueTicketStatus::CALLED)
             ->orderByDesc('called_at')   // ← usa o instante de chamada
             ->first();

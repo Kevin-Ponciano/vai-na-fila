@@ -9,7 +9,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class QueueTicketCalledEvent implements ShouldBroadcast
+class QueueTicketUpdatedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -24,7 +24,7 @@ class QueueTicketCalledEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel("queue.{$this->ticket->queue_id}"),
+            new PrivateChannel("client.{$this->ticket->client_id}.call"),
         ];
     }
 
@@ -39,6 +39,6 @@ class QueueTicketCalledEvent implements ShouldBroadcast
     /** (opcional) renomeia o evento no cliente JS */
     public function broadcastAs(): string
     {
-        return 'ticket.called';
+        return 'ticket.updated';
     }
 }

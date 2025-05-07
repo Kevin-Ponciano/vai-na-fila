@@ -14,12 +14,15 @@ class QueueCalling extends Component
     public function mount($id)
     {
         $this->ticket = Auth::user()->queueTickets()->findOrFail($id);
-//        if ($this->ticket->status !== QueueTicketStatus::WAITING->value) {
-//            return redirect()
-//                ->with('flash.banner', 'Senha ainda em espera ou já chamada!')
-//                ->with('flash.bannerStyle', 'danger')
-//                ->route('my-queues');
-//        }
+        if($this->ticket->status !== QueueTicketStatus::CALLING->value){
+            $message = $this->ticket->status === QueueTicketStatus::IN_SERVICE->value
+                ? 'Você Está em Atendimento!'
+                : 'Senha já chamada ou ainda em espera!';
+            return redirect()
+                ->with('flash.banner', $message)
+                ->with('flash.bannerStyle', 'danger')
+                ->route('my-queues');
+        }
     }
 
     public function render()

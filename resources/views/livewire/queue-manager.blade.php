@@ -1,9 +1,10 @@
+@php use App\Enums\QueueTicketStatus; @endphp
 <div>
     <!-- Título da página -->
     <x-page-title title="Gerenciar Fila" :previus="route('queues')"/>
 
     <!-- Painel principal -->
-    <div class="mt-6 p-6">
+    <div class="mt-4 p-4">
         <div class="flex flex-col items-center gap-6">
             <!-- Senha atual -->
             <div class="text-center">
@@ -12,6 +13,10 @@
                     <div class="bg-gray-300 text-primary-dark font-bold rounded-lg p-2 text-5xl mt-7">
                         {{$currentTicket->ticket_number}}
                     </div>
+                    <div
+                        class="text-primary-dark font-bold rounded-lg text-1xl mt-1 @if($currentTicket->status == QueueTicketStatus::CALLING->value) animate-pulse @endif">
+                        {{$currentTicket->status}}
+                    </div>
                 @else
                     <div class="bg-gray-300 text-primary-dark font-bold rounded-lg p-2 text-5xl mt-7">
                         000
@@ -19,16 +24,25 @@
                 @endif
             </div>
 
-            <!-- Botão próximo -->
-            <x-button wire:click="callNextTicket" class="py-3 text-[1.5rem]">Próximo</x-button>
+            {{--            <x-button wire:click="null" class="py-3 text-[1.5rem] bg-green-600 hover:bg-green-800">--}}
+            {{--                Atender--}}
+            {{--            </x-button>--}}
+            @if($currentTicket?->status == QueueTicketStatus::CALLING->value)
+                <button type="button" wire:click="inServiceTicket"
+                        class="focus:outline-none text-white bg-green-500 hover:bg-green-700 font-medium rounded-lg text-[1.5rem] px-4 py-2 me-2 mb-2">
+                    Atender
+                </button>
+            @endif
         </div>
 
         <!-- Botão anterior -->
-        <div class="flex justify-center mt-10">
+        <div class="flex justify-center mt-10 gap-4">
             <x-button wire:click="callPreviousTicket"
                       {{--                      wire:confirm="Você tem certeza que deseja voltar uma senha?"--}}
                       class="bg-secondary active:bg-secondary-light">Anterior
             </x-button>
+
+            <x-button wire:click="callNextTicket" class="py-3 text-[1.5rem]">Próximo</x-button>
         </div>
     </div>
 

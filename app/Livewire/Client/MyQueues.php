@@ -12,7 +12,8 @@ class MyQueues extends Component
 
     public function mount()
     {
-        $this->tickets = Auth::user()->queueTickets()->where('status', QueueTicketStatus::WAITING->value)
+        $this->tickets = Auth::user()->queueTickets()
+            ->whereIn('status', [QueueTicketStatus::WAITING, QueueTicketStatus::CALLING, QueueTicketStatus::IN_SERVICE])
             ->with('queue')->get();
     }
 

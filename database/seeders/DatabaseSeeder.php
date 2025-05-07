@@ -47,15 +47,7 @@ class DatabaseSeeder extends Seeder
             $queues = $supermarket->queues;
             $timestamp = Carbon::now();
             foreach ($queues as $queue) {
-                // Cria o chamado primeiro (último a ser inserido na fila visualmente)
-                QueueTicket::factory()->create([
-                    'queue_id' => $queue->id,
-                    'status' => QueueTicketStatus::CALLED,
-                    'created_at' => $timestamp
-                ]);
-
-
-                for ($i = 0; $i < 9; $i++) {
+                for ($i = 0; $i < 10; $i++) {
                     $timestamp->addMinutes(2);
                     QueueTicket::factory()->create([
                         'queue_id' => $queue->id,

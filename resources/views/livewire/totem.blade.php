@@ -123,7 +123,7 @@
                 this.remainingTime = waitTimeInMinutes * 60;
 
                 this.timerInterval = setInterval(() => {
-                    if (this.remainingTime > 0) {
+                    if (this.remainingTime >= 0) {
                         this.remainingTime -= 1;
                     } else {
                         this.$wire.clearState();

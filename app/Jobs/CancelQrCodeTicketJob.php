@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Enums\QueueTicketStatus;
 use App\Models\QueueTicket;
+use Cache;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -27,6 +28,11 @@ class CancelQrCodeTicketJob implements ShouldQueue
             ->where('status', QueueTicketStatus::PROCESSING->value)
             ->first();
 
+        if (!$ticket) {
+            return;
+        }
 
+        $ticket->delete();
+        Cache::forget($this->token);
     }
 }

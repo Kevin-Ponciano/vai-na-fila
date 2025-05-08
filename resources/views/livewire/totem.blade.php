@@ -5,7 +5,7 @@
     class="flex flex-col min-h-screen bg-blue-100 text-center"
 >
     <!-- ─────────── TELA INICIAL ─────────── -->
-    <div id="tela-inicial" class="flex-grow flex flex-col">
+    <div id="tela-inicial" class="flex flex-col" :class="{ 'flex-grow': !prioritySelected }">
         <div class="pt-6 flex justify-center">
             <img src="{{ asset('assets/img/logo_nome.svg') }}"
                  alt="Fila Digital" class="w-[15rem]"/>
@@ -35,11 +35,15 @@
         <!-- ─────────── TELA DO QR ─────────── -->
         <template x-if="prioritySelected && !loading">
             <div class="flex-grow flex flex-col items-center justify-center">
-                <!-- Livewire não toca aqui -->
+                <!-- Cronômetro -->
+                <div x-show="remainingTime > 0" class="text-sm text-red-600 mb-4 font-bold">
+                    Expira em: <span x-text="formatTime(remainingTime)"></span>
+                </div>
+
                 <div
                     x-ref="canvas"
                     wire:ignore
-                    class="w-[30rem] h-[30rem] bg-white rounded-lg shadow-lg flex items-center justify-center mb-6">
+                    class="w-[25rem] h-[25rem] bg-white rounded-lg shadow-lg flex items-center justify-center mb-6">
                 </div>
 
                 <h2 x-text="prioritySelected"
@@ -70,38 +74,35 @@
     </div>
 </div>
 
-
 {{-- ─────────── SCRIPTS ─────────── --}}
 <script src="{{ asset('assets/js/easy.qrcode.min.js') }}"></script>
 <script>
     function qrComponent() {
         return {
-            /* Two-way binding só para interface */
             prioritySelected: @entangle('prioritySelected'),
             loading: @entangle('loading'),
+            remainingTime: 0,
+            timerInterval: null, // ← novo campo para armazenar o intervalo
 
             baseOptions: {
-                width: 450,
-                height: 450,
+                width: 370,
+                height: 370,
                 colorDark: "#1c83f4",
                 colorLight: "#ffffff",
                 correctLevel: QRCode.CorrectLevel.H,
                 logo: "{{ asset('assets/img/logo.svg') }}",
-                logoWidth: 120,
-                logoHeight: 120,
+                logoWidth: 80,
+                logoHeight: 80,
             },
 
             init() {
-                /* Evento Livewire fornece a URL: */
-                Livewire.on('generateQrCode', ({url}) => {
+                Livewire.on('generateQrCode', ({url, wait}) => {
                     this.draw(url);
+                    this.startTimer(wait);
                 });
-
-                Livewire.on('pr')
             },
 
             draw(text) {
-                /* garante que o canvas exista */
                 this.$nextTick(() => {
                     this.$refs.canvas.innerHTML = '';
                     new QRCode(this.$refs.canvas, {...this.baseOptions, text});
@@ -111,21 +112,37 @@
             print() {
                 this.loading = true;
                 this.$wire.printQrCode();
+            },
+
+            startTimer(waitTimeInMinutes) {
+                // Limpa o timer anterior se existir
+                if (this.timerInterval) {
+                    clearInterval(this.timerInterval);
+                }
+
+                this.remainingTime = waitTimeInMinutes * 60;
+
+                this.timerInterval = setInterval(() => {
+                    if (this.remainingTime > 0) {
+                        this.remainingTime -= 1;
+                    } else {
+                        this.$wire.clearState();
+                        clearInterval(this.timerInterval);
+                        this.timerInterval = null;
+                    }
+                }, 1000);
+            },
+
+            formatTime(seconds) {
+                const minutes = String(Math.floor(seconds / 60)).padStart(2, '0');
+                const secs = String(seconds % 60).padStart(2, '0');
+                return `${minutes}:${secs}`;
             }
         }
     }
+
 
     document.addEventListener('alpine:init', () =>
         Alpine.data('qrComponent', qrComponent)
     );
 </script>
-@script
-<script>
-    $(document).ready(function () {
-        Echo.private('queue.{{ $queue->id }}')
-            .listen('.ticket.generated', function (payload) {
-                $wire.clearState()
-            });
-    });
-</script>
-@endscript

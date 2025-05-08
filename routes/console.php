@@ -11,7 +11,7 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Schedule::job(new GenerateMonthlyQueueReport)
-    ->monthlyOn('01','0:0')
+    ->monthlyOn('01')
     ->onFailure(function () {
         Log::error('Falha ao gerar relatório mensal de filas.');
     });

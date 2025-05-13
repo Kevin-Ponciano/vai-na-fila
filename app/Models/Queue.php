@@ -44,7 +44,7 @@ class Queue extends Model
     public function lastCalledTicket()
     {
         return $this->queueTickets()
-            ->where('status', QueueTicketStatus::CALLED)
+            ->whereIn('status', [QueueTicketStatus::CALLED, QueueTicketStatus::EXPIRED])
             ->orderByDesc('called_at')   // ← usa o instante de chamada
             ->first();
     }

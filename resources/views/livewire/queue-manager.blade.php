@@ -39,6 +39,7 @@
             </x-button>
 
             <x-button wire:click="callNextTicket" class="py-3 text-[1.5rem]">Próximo</x-button>
+
         </div>
     </div>
 
@@ -70,6 +71,12 @@
             if (document.fullscreenElement) {
                 document.exitFullscreen();
             }
+
+            {{--Echo.private('queue.{{ $queue->id }}')--}}
+            {{--    .listen('.ticket.generated', function (payload) {--}}
+            {{--        @this.--}}
+            {{--        call('$refresh')--}}
+            {{--    });--}}
         });
     </script>
 </div>

@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Enums\QueueTicketStatus;
+use App\Events\TicketExpiredEvent;
 use App\Models\QueueTicket;
 use Cache;
 use Illuminate\Bus\Queueable;
@@ -16,31 +17,32 @@ class ExpireTicketJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public function __construct(
-        public int $queueTicketId,
-        public int $validateCode,
+        public int $ticketId,
+        public string $validateCode,
+        public string $sessionId,
     )
     {
     }
 
     public function handle(): void
     {
-        $ticket = QueueTicket::whereKey($this->queueTicketId)
+        $meta = Cache::get($this->cacheKey());
+        $ticket = QueueTicket::whereKey($this->ticketId)
             ->where('status', QueueTicketStatus::CALLING)
             ->first();
 
-        if (!$ticket) {
+        if (!$ticket || $meta['validate_code'] != $this->validateCode) {
             return;
         }
 
-        if ($this->validateCode !== Cache::get($this->cacheKey())) {
-            return;
-        }
-
-        
+        TicketExpiredEvent::dispatch(
+            $ticket,
+            $this->sessionId,
+        );
     }
 
     private function cacheKey(): string
     {
-        return "ticket:{$this->queueTicketId}:validate_code";
+        return "ticket:{$this->ticketId}:meta";
     }
 }

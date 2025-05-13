@@ -4,11 +4,13 @@ namespace App\Models;
 
 use App\Enums\QueueTicketPriority;
 use App\Enums\QueueTicketStatus;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 class QueueTicket extends Model
@@ -35,14 +37,6 @@ class QueueTicket extends Model
         'status_name',
     ];
 
-    protected function statusName(): Attribute
-    {
-        $statusEnum = QueueTicketStatus::from($this->status);
-        return new Attribute(
-            get: fn() => $statusEnum->name(),
-        );
-    }
-
     static function boot(): void
     {
         parent::boot();
@@ -68,6 +62,29 @@ class QueueTicket extends Model
         return $queuePrefix . str_pad($nextTicketNumber, 3, '0', STR_PAD_LEFT);
     }
 
+    /**
+     * Adiciona um “OR (…)” que seleciona tickets EXPIRADOS
+     * cujo called_at ocorreu dentro da janela dada.
+     *
+     * Ex.:  ->whereIn('status', …)->orExpiredStillValid(5)
+     *
+     * @param Builder $query
+     * @param int $minutes Janela em minutos (default = 5)
+     * @return Builder
+     */
+    public function scopeOrExpiredStillValid(
+        Builder $query,
+        int     $minutes = 5
+    ): Builder
+    {
+        $windowStart = Carbon::now()->subMinutes($minutes);
+
+        return $query->orWhere(function (Builder $sub) use ($windowStart) {
+            $sub->where('status', QueueTicketStatus::EXPIRED)
+                ->where('called_at', '>=', $windowStart);
+        });
+    }
+
     public function client(): BelongsTo
     {
         return $this->belongsTo(Client::class);
@@ -81,5 +98,13 @@ class QueueTicket extends Model
     public function notifications(): QueueTicket|HasMany
     {
         return $this->hasMany(Notification::class);
+    }
+
+    protected function statusName(): Attribute
+    {
+        $statusEnum = QueueTicketStatus::from($this->status);
+        return new Attribute(
+            get: fn() => $statusEnum->name(),
+        );
     }
 }

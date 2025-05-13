@@ -13,16 +13,31 @@ class TicketExpiredEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public function __construct(public QueueTicket $queueTicket)
+    public function __construct(
+        public QueueTicket $queueTicket,
+        public string      $sessionId,
+    )
     {
         $this->queueTicket->load('queue');
-        #TODO: Continuar daqui :https://chatgpt.com/c/68228142-3734-800f-b999-e71dc6df00b9
     }
 
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('channel-name')
+            new PrivateChannel('queue.' . $this->queueTicket->queue_id),
+        ];
+    }
+
+    public function broadcastAs(): string
+    {
+        return 'ticket.expired';
+    }
+
+    public function broadcastWith(): array
+    {
+        return [
+            'ticket_id' => $this->queueTicket->id,
+            'session_id' => $this->sessionId,
         ];
     }
 }

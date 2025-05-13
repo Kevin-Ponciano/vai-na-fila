@@ -10,12 +10,13 @@ use Livewire\Component;
 class QueueCalling extends Component
 {
     public QueueTicket $ticket;
-    const WAIT_EXPIRATION = 3; // minutes
+    const WAIT_EXPIRATION = 0.1; // minutes
     public $timeLeft;
 
     public function mount($id)
     {
         $this->ticket = Auth::user()->queueTickets()->findOrFail($id);
+
         if($this->ticket->status !== QueueTicketStatus::CALLING->value){
             $message = $this->ticket->status === QueueTicketStatus::IN_SERVICE->value
                 ? 'Você Está em Atendimento!'
@@ -26,7 +27,10 @@ class QueueCalling extends Component
                 ->route('my-queues');
         }
 
-        $this->timeLeft = $this->ticket->called_at->addMinutes(self::WAIT_EXPIRATION)->diffInSeconds(now());
+        $this->timeLeft = $this->ticket->called_at
+            ->addMinutes(self::WAIT_EXPIRATION)
+            ->addSeconds(5)
+            ->diffInSeconds(now());
         if ($this->timeLeft >= 0){
             $this->timeLeft = 0;
         }

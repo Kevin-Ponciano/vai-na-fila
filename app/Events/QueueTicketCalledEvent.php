@@ -13,11 +13,9 @@ class QueueTicketCalledEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public QueueTicket $ticket;
-
-    public function __construct(QueueTicket $ticket)
+    public function __construct(public QueueTicket $ticket)
     {
-        $this->ticket = $ticket->load('queue');
+        $this->ticket->load('queue');
     }
 
     /** Canal público onde o telão vai “escutar” */

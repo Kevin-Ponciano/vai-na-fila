@@ -22,6 +22,7 @@
             </a>
         </div>
     </div>
+    @livewire('echo-listen')
 </div>
 
 @script

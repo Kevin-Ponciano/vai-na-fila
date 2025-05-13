@@ -17,10 +17,15 @@ class QueuePosition extends Component
     {
         $this->ticket = Auth::user()->queueTickets()
             ->whereKey($id)
-            ->where('status', QueueTicketStatus::WAITING->value)
+            ->whereIn('status', [QueueTicketStatus::WAITING, QueueTicketStatus::CALLING, QueueTicketStatus::IN_SERVICE])
             ->first();
         if (!$this->ticket) {
             return redirect()->route('my-queues');
+        }
+        if ($this->ticket->status === QueueTicketStatus::CALLING->value) {
+            return redirect()->route('queue.calling', [
+                'id' => $this->ticket->id,
+            ]);
         }
         $this->queue = $this->ticket->queue;
     }

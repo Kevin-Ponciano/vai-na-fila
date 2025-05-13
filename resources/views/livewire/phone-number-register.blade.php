@@ -13,4 +13,5 @@
             </x-button>
         </form>
     </div>
+    @livewire('echo-listen')
 </div>

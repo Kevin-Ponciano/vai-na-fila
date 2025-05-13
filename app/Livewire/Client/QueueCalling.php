@@ -10,6 +10,8 @@ use Livewire\Component;
 class QueueCalling extends Component
 {
     public QueueTicket $ticket;
+    const WAIT_EXPIRATION = 3; // minutes
+    public $timeLeft;
 
     public function mount($id)
     {
@@ -22,6 +24,11 @@ class QueueCalling extends Component
                 ->with('flash.banner', $message)
                 ->with('flash.bannerStyle', 'danger')
                 ->route('my-queues');
+        }
+
+        $this->timeLeft = $this->ticket->called_at->addMinutes(self::WAIT_EXPIRATION)->diffInSeconds(now());
+        if ($this->timeLeft >= 0){
+            $this->timeLeft = 0;
         }
     }
 

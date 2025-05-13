@@ -4,5 +4,5 @@
         {{ $slot }}
     </main>
     <x-footer-client/>
-    <x-echo-listen/>
+    @livewire('echo-listen')
 </x-app-layout>

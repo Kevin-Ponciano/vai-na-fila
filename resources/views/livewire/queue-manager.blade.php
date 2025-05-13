@@ -23,10 +23,6 @@
                     </div>
                 @endif
             </div>
-
-            {{--            <x-button wire:click="null" class="py-3 text-[1.5rem] bg-green-600 hover:bg-green-800">--}}
-            {{--                Atender--}}
-            {{--            </x-button>--}}
             @if($currentTicket?->status == QueueTicketStatus::CALLING->value)
                 <button type="button" wire:click="inServiceTicket"
                         class="focus:outline-none text-white bg-green-500 hover:bg-green-700 font-medium rounded-lg text-[1.5rem] px-4 py-2 me-2 mb-2">

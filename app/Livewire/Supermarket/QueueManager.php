@@ -24,18 +24,21 @@
 
         /* ------------------------ Propriedades ---------------------- */
         public Queue $queue;
-        public $currentTicket;               // exibido na view
+        public $currentTicket;
+        public $nextTicket; // ticket que será chamado
 
         /* ------------------- Métodos do Ciclo de Vida --------------- */
 
         public function mount(int $id): void
         {
             $this->queue = Auth::user()->supermarket->queues->findOrFail($id);
+
             $this->refreshCurrentTicket();
         }
 
         public function render()
         {
+            debug($this->nextWaiting());
             return view('livewire.queue-manager');
         }
 
@@ -216,7 +219,7 @@
                 $ticket->update([
                     'status' => QueueTicketStatus::CALLED->value,
                 ]);
-            } else {
+            }elseif($ticket->status !== QueueTicketStatus::CALLED->value){
                 $ticket->update([
                     'status' => QueueTicketStatus::WAITING->value,
                     'called_at' => null,
@@ -224,7 +227,7 @@
             }
 
             #TODO: implementar a notificação para o cliente
-            $this->announceTicket($ticket);
+            //$this->announceTicket($ticket);
             $this->informeClient($ticket);
             // (opcional) notifique o cliente sobre a reversão
             // $ticket->client?->notify(new TicketReverted($ticket));

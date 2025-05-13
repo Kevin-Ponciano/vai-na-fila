@@ -45,7 +45,9 @@
                     wire:ignore
                     class="w-[25rem] h-[25rem] bg-white rounded-lg shadow-lg flex items-center justify-center mb-6">
                 </div>
-
+                @if(config('app.env') === 'local')
+                    {{$url}}
+                @endif
                 <h2 x-text="prioritySelected"
                     class="text-xl font-semibold text-blue-800 mb-4"></h2>
 
@@ -146,3 +148,13 @@
         Alpine.data('qrComponent', qrComponent)
     );
 </script>
+@script
+<script>
+    $(document).ready(function () {
+        Echo.private('queue.{{ $queue->id }}')
+            .listen('.ticket.generated', function (payload) {
+                $wire.clearState()
+            });
+    });
+</script>
+@endscript

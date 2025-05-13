@@ -24,6 +24,11 @@ class QueueTicket extends Model
         'expired_at',
     ];
 
+    protected $casts = [
+        'called_at' => 'datetime',
+        'expired_at' => 'datetime',
+    ];
+
     static function boot(): void
     {
         parent::boot();

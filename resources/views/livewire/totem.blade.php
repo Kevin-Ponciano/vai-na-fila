@@ -18,7 +18,7 @@
 
                 <div class="space-y-4 w-full max-w-xs text-[1.5rem]">
                     <button
-                        @click="$wire.selectedQueue('normal')"
+                        @click="$wire.selectedQueue('geral')"
                         class="w-full bg-blue-700 text-white font-bold py-2 rounded-lg hover:bg-blue-800">
                         Geral
                     </button>
@@ -48,7 +48,7 @@
                 @if(config('app.env') === 'local')
                     {{$url}}
                 @endif
-                <h2 x-text="prioritySelected"
+                <h2 x-text="prioritySelectedLabel"
                     class="text-xl font-semibold text-blue-800 mb-4"></h2>
 
                 <button
@@ -82,6 +82,7 @@
     function qrComponent() {
         return {
             prioritySelected: @entangle('prioritySelected'),
+            prioritySelectedLabel: @entangle('prioritySelectedLabel'),
             loading: @entangle('loading'),
             remainingTime: 0,
             timerInterval: null, // ← novo campo para armazenar o intervalo

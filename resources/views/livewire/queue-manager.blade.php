@@ -15,7 +15,7 @@
                     </div>
                     <div
                         class="text-primary-dark font-bold rounded-lg text-1xl mt-1 @if($currentTicket->status == QueueTicketStatus::CALLING->value) animate-pulse @endif">
-                        {{$currentTicket->status}}
+                        {{$currentTicket->status_name}}
                     </div>
                 @else
                     <div class="bg-gray-300 text-primary-dark font-bold rounded-lg p-2 text-5xl mt-7">

@@ -32,6 +32,7 @@ class Totem extends Component
      |------------------------------------------------------------------*/
     public Queue $queue;
     public ?string $prioritySelected = null;
+    public ?string $prioritySelectedLabel = null;
     public ?string $queueTicketId = null;
     public ?string $token = null;
     public bool $loading = false;
@@ -58,6 +59,7 @@ class Totem extends Component
     {
         $priorityEnum = QueueTicketPriority::tryFrom($priority)->value
             ?? throw new ModelNotFoundException('Prioridade inválida');
+        $this->prioritySelectedLabel = QueueTicketPriority::tryFrom($priority)->name();
 
         /* --------- 1. Lock para evitar corrida entre múltiplos totens ------------- */
         $lockKey = "queue:{$this->queue->id}:issue_ticket_lock";

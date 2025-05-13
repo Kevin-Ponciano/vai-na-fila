@@ -2,22 +2,30 @@
 
 namespace App\Enums;
 
+use App\Enums\Attribute\Description;
+use App\Enums\Attribute\Name;
+use ArchTech\Enums\Metadata;
 use ArchTech\Enums\Names;
 use ArchTech\Enums\Values;
+use ArchTech\Enums\Meta\Meta;
 
+#[Meta(Name::class, Description::class)]
 enum QueueTicketStatus: string
 {
-    use Names, Values;
+    use Names, Values, Metadata;
 
-    case PROCESSING = 'processing';   // (#1) Ticket recém-gerado: criando QR / imprimindo
-    case WAITING = 'waiting';      // (#2) Na fila, aguardando ser chamado
-    case CALLING = 'calling';      // (#3) Display/painel está chamando o número
-    case IN_SERVICE = 'in_service';   // (#4) Cliente atendeu, atendimento em andamento
-    case CALLED = 'called';       // (#5) Atendimento concluído com sucesso
-
-    /* Estados de saída sem atendimento */
-    case EXPIRED = 'expired';      // Timeout (cliente não apareceu a tempo)
-    case CANCELLED = 'cancelled';    // Operador/cliente cancelou antes de ser atendido
-
-
+    #[Name('Processando')]
+    case PROCESSING = 'processing';
+    #[Name('Aguardando')]
+    case WAITING = 'waiting';
+    #[Name('Chamando')]
+    case CALLING = 'calling';
+    #[Name('Atendendo')]
+    case IN_SERVICE = 'in_service';
+    #[Name('Chamado')]
+    case CALLED = 'called';
+    #[Name('Expirado')]
+    case EXPIRED = 'expired';
+    #[Name('Cancelado')]
+    case CANCELLED = 'cancelled';
 }

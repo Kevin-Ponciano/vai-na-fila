@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Enums\QueueTicketPriority;
+use App\Enums\QueueTicketStatus;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -28,6 +30,18 @@ class QueueTicket extends Model
         'called_at' => 'datetime',
         'expired_at' => 'datetime',
     ];
+
+    protected $appends = [
+        'status_name',
+    ];
+
+    protected function statusName(): Attribute
+    {
+        $statusEnum = QueueTicketStatus::from($this->status);
+        return new Attribute(
+            get: fn() => $statusEnum->name(),
+        );
+    }
 
     static function boot(): void
     {

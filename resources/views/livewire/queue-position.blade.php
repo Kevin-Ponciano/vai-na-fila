@@ -7,14 +7,17 @@
                 Sua Senha:
             </div>
         </div>
-        <div>
-            <div class="text-primary font-bold antialiased text-[4rem] text-center">
+        <div class="text-center">
+            <div class="text-primary font-bold antialiased text-[4rem]">
                 {{ $ticket->ticket_number }}
+            </div>
+            <div class="text-primary-dark antialiased text-[1.5rem]">
+                ({{ $ticket->status_name }})
             </div>
         </div>
         <div class="text-center">
             <button wire:click="leaveQueue" wire:confirm="Você tem certeza que deseja desistir da fila?"
-                class="w-[15rem] h-[3rem] font-bold text-red-600 hover:text-white border border-2 border-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 rounded-lg">
+                    class="w-[15rem] h-[3rem] font-bold text-red-600 hover:text-white border border-2 border-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 rounded-lg">
                 Desistir da Fila
             </button>
         </div>

@@ -11,8 +11,6 @@ use Livewire\Component;
 
 class MyQueues extends Component
 {
-    const EXPIRATION_TIME_MAX = 5;   // minutos
-
     public $tickets = [];
 
     public function mount(): void

@@ -10,7 +10,7 @@ use Livewire\Component;
 class QueueCalling extends Component
 {
     public QueueTicket $ticket;
-    const WAIT_EXPIRATION = 0.1; // minutes
+    const EXPIRATION_TIME = 0.5; // minutes
     public $timeLeft;
 
     public function mount($id)
@@ -28,7 +28,7 @@ class QueueCalling extends Component
         }
 
         $this->timeLeft = $this->ticket->called_at
-            ->addMinutes(self::WAIT_EXPIRATION)
+            ->addMinutes(self::EXPIRATION_TIME)
             ->addSeconds(5)
             ->diffInSeconds(now());
         if ($this->timeLeft >= 0){

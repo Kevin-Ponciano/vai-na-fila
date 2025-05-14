@@ -56,7 +56,8 @@
         </svg>
     </a>
 
-    <a href="{{route('queues.screen', ['id'=>$queue->id])}}"
+    <a href="{{route('queues.screen', ['id'=>$queue->id])}}" wire:navigatemrs
+
        class="text-white fixed start-6 bottom-[5rem] bg-secondary p-3 rounded-full shadow-lg hover:bg-primary">
         <!-- Ícone de TV -->
         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" fill="none" stroke="currentColor">

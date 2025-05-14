@@ -21,7 +21,7 @@ class QueueManager extends Component
     private const PRIORITY_QUOTA = 2;    // 2 PRIORITY → 1 NORMAL
     private const LOCK_TTL = 5;          // seg.
     private const LOCK_WAIT = 3;         // seg.
-    private const EXPIRATION_TIME = 0.1;   // min.
+    private const EXPIRATION_TIME = 0.5;   // min.
 
     /* ------------------------ Propriedades ---------------------- */
     public Queue $queue;
@@ -174,7 +174,7 @@ class QueueManager extends Component
     private function nextWaiting($priority = null): ?QueueTicket
     {
         return $this->queue->queueTickets()
-            ->where('status', QueueTicketStatus::WAITING->value)
+            ->where('status', QueueTicketStatus::WAITING)
             ->when($priority, function ($query) use ($priority) {
                 return $query->where('priority', $priority);
             })

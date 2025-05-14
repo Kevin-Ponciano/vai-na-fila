@@ -66,8 +66,6 @@ class QueueTicket extends Model
      * Adiciona um “OR (…)” que seleciona tickets EXPIRADOS
      * cujo called_at ocorreu dentro da janela dada.
      *
-     * Ex.:  ->whereIn('status', …)->orExpiredStillValid(5)
-     *
      * @param Builder $query
      * @param int $minutes Janela em minutos (default = 5)
      * @return Builder

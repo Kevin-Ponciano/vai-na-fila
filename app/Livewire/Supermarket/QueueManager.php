@@ -49,8 +49,8 @@ class QueueManager extends Component
             $this->queue->refresh();
             $this->currentTicket = $this->queue->currentTicket() ?: $this->queue->lastCalledTicket();
         }
-        $this->hasNextTicket = (bool)$this->nextWaiting();
-        $this->hasPreviousTicket = (bool)$this->findPreviousTicket($this->currentTicket?->called_at);
+        //$this->hasNextTicket = (bool)$this->nextWaiting();
+        //$this->hasPreviousTicket = (bool)$this->findPreviousTicket($this->currentTicket?->called_at);
     }
 
     /* --------------------- Ações Públicas ----------------------- */
@@ -279,12 +279,15 @@ class QueueManager extends Component
     private function findPreviousTicket($pivotCalledAt): ?QueueTicket
     {
         return $this->queue->queueTickets()
-            ->where('status', QueueTicketStatus::CALLED->value)
-            ->orExpiredStillValid()
+            ->where(function ($q) {
+                $q->where('status', QueueTicketStatus::CALLED->value)
+                    ->orExpiredStillValid();
+            })
             ->where('called_at', '<', $pivotCalledAt)
             ->orderByDesc('called_at')
             ->lockForUpdate()
             ->first();
+
     }
 
     /**

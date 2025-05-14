@@ -4,12 +4,13 @@ namespace App\Livewire\Client;
 
 use App\Enums\QueueTicketStatus;
 use App\Models\Queue;
-use Illuminate\Database\Eloquent\Builder;
 use Auth;
+use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 
 class QueuePosition extends Component
-{    public $ticket;
+{
+    public $ticket;
     public Queue $queue;
 
     public function mount(int $id)
@@ -17,15 +18,16 @@ class QueuePosition extends Component
         $this->ticket = Auth::user()
             ->queueTickets()
             ->whereKey($id)
-            ->whereIn('status', [
-                QueueTicketStatus::WAITING,
-                QueueTicketStatus::CALLING,
-                QueueTicketStatus::IN_SERVICE,
-            ])
-            ->orExpiredStillValid()   // ← escopo novo
+            ->where(function (Builder $query) {
+                $query->whereIn('status', [
+                    QueueTicketStatus::WAITING,
+                    QueueTicketStatus::CALLING,
+                    QueueTicketStatus::IN_SERVICE,
+                ])->orExpiredStillValid();   // ← escopo
+            })
             ->first();
 
-        if (! $this->ticket) {
+        if (!$this->ticket) {
             return redirect()->route('my-queues');
         }
 

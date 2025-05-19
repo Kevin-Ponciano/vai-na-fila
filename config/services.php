@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    'evolution' => [
+        'server_url' => env('EVO_API_SERVER_URL'),
+        'key' => env('EVO_API_KEY'),
+        'instance' => env('EVO_API_INSTANCE'),
+    ]
+
 ];

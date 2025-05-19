@@ -35,6 +35,7 @@ class QueueTicket extends Model
 
     protected $appends = [
         'status_name',
+        'position',
     ];
 
     static function boot(): void
@@ -96,6 +97,18 @@ class QueueTicket extends Model
     public function notifications(): QueueTicket|HasMany
     {
         return $this->hasMany(Notification::class);
+    }
+
+    public function position(): Attribute
+    {
+        $positionNumber = $this->queue->queueTickets()
+                ->where('status', QueueTicketStatus::WAITING)
+                ->where('priority', $this->priority)
+                ->where('id', '!=', $this->id)
+                ->count() + 1;
+        return new Attribute(
+            get: fn() => $positionNumber . '° - ' . QueueTicketPriority::tryFrom($this->priority)->name(),
+        );
     }
 
     protected function statusName(): Attribute

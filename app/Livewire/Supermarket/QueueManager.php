@@ -7,8 +7,10 @@ use App\Enums\QueueTicketStatus;
 use App\Events\QueueTicketCalledEvent;
 use App\Events\QueueTicketUpdatedEvent;
 use App\Jobs\ExpireTicketJob;
+use App\Jobs\NotificationTicketEvolutionJob;
 use App\Models\Queue;
 use App\Models\QueueTicket;
+use App\Services\EvolutionApiService;
 use Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -28,6 +30,7 @@ class QueueManager extends Component
     public $currentTicket;
     public $hasNextTicket;
     public $hasPreviousTicket;
+
 
     /* ------------------- Métodos do Ciclo de Vida --------------- */
 
@@ -137,6 +140,12 @@ class QueueManager extends Component
     private function informeClient(QueueTicket $ticket): void
     {
         broadcast(new QueueTicketUpdatedEvent($ticket));
+
+        if (!$ticket->client || !$ticket->client->phone) {
+            return;
+        }
+
+        NotificationTicketEvolutionJob::dispatch($ticket->id);
     }
 
     /**

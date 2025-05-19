@@ -1,3 +1,4 @@
+@php use App\Enums\QueueTicketStatus; @endphp
 <div>
     <x-page-title :title="$queue->name"/>
 
@@ -11,6 +12,12 @@
             <div class="text-primary font-bold antialiased text-[4rem]">
                 {{ $ticket->ticket_number }}
             </div>
+            @if($ticket->status == QueueTicketStatus::WAITING->value)
+                <div class="text-primary font-bold antialiased text-2xl">
+                    Posição:
+                    {{ $ticket->position }}
+                </div>
+            @endif
             <div class="text-primary-dark antialiased text-[1.5rem]">
                 ({{ $ticket->status_name }})
             </div>

@@ -20,16 +20,16 @@ use Log;
 class QueueManager extends Component
 {
     /* ------------------------ Constantes ------------------------ */
-    private const PRIORITY_QUOTA = 2;    // 2 PRIORITY → 1 NORMAL
     private const LOCK_TTL = 5;          // seg.
     private const LOCK_WAIT = 3;         // seg.
-    private const EXPIRATION_TIME = 0.5;   // min.
 
     /* ------------------------ Propriedades ---------------------- */
     public Queue $queue;
     public $currentTicket;
     public $hasNextTicket;
     public $hasPreviousTicket;
+    public int $priority_quota;
+    public int $expiration_time;
 
 
     /* ------------------- Métodos do Ciclo de Vida --------------- */
@@ -37,8 +37,10 @@ class QueueManager extends Component
     public function mount(int $id): void
     {
         $this->queue = Auth::user()->supermarket->queues->findOrFail($id);
-
         $this->refreshCurrentTicket();
+
+        $this->priority_quota = config('vainafila.queue_priority_quota');
+        $this->expiration_time = config('vainafila.ticket_expiration_time');
     }
 
     /**
@@ -94,6 +96,18 @@ class QueueManager extends Component
         });
 
         $this->refreshCurrentTicket();
+
+        $proximalTickets = $this->queue->queueTickets()
+            ->where('status', QueueTicketStatus::WAITING)
+            ->orderBy('created_at')
+            ->limit(2)
+            ->get();
+
+        if($proximalTickets->isNotEmpty()) {
+            $proximalTickets->each(function ($ticket){
+                NotificationTicketEvolutionJob::dispatch($ticket->id, true);
+            });
+        }
     }
 
     /**
@@ -141,10 +155,6 @@ class QueueManager extends Component
     {
         broadcast(new QueueTicketUpdatedEvent($ticket));
 
-        if (!$ticket->client || !$ticket->client->phone) {
-            return;
-        }
-
         NotificationTicketEvolutionJob::dispatch($ticket->id);
     }
 
@@ -156,7 +166,7 @@ class QueueManager extends Component
         $priorityCalls = Cache::get($counterKey, 0);
 
         /* 1. PRIORITY (se ainda não bateu a cota) */
-        if ($priorityCalls < self::PRIORITY_QUOTA &&
+        if ($priorityCalls < $this->priority_quota &&
             ($ticket = $this->nextWaiting(QueueTicketPriority::PRIORITY->value))) {
             $this->callTicket($ticket);
             Cache::increment($counterKey);
@@ -226,13 +236,13 @@ class QueueManager extends Component
         Cache::put("ticket:{$ticket->id}:meta", [
             'validate_code' => $validationCode,
             'session_id' => $sessionId,
-        ], now()->addMinutes(self::EXPIRATION_TIME + 1));
+        ], now()->addMinutes($this->expiration_time + 1));
 
         ExpireTicketJob::dispatch(
             ticketId: $ticket->id,
             validateCode: $validationCode,
             sessionId: $sessionId
-        )->delay(now()->addMinutes(self::EXPIRATION_TIME));
+        )->delay(now()->addMinutes($this->expiration_time));
     }
 
     /**

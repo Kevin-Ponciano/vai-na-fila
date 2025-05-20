@@ -19,6 +19,7 @@ class NotificationTicketEvolutionJob implements ShouldQueue
 
     public function __construct(
         public string $ticketId,
+        public bool   $proximal = false,
     )
     {
         $this->ticket = QueueTicket::find($this->ticketId);
@@ -26,20 +27,30 @@ class NotificationTicketEvolutionJob implements ShouldQueue
 
     public function handle(): void
     {
+
+        if (!$this->ticket->client || !$this->ticket->client->phone) {
+            return;
+        }
+
         $actualStatus = $this->ticket->status;
-        switch ($actualStatus) {
-            case QueueTicketStatus::CALLING->value:
-                app(EvolutionApiService::class)
-                    ->ticketStatusCalling($this->ticket->client->phone, $this->ticket);
-                break;
-            case QueueTicketStatus::EXPIRED->value:
-                app(EvolutionApiService::class)
-                    ->ticketStatusExpired($this->ticket->client->phone, $this->ticket);
-                break;
-            case QueueTicketStatus::WAITING->value:
-                app(EvolutionApiService::class)
-                    ->ticketStatusWaiting($this->ticket->client->phone, $this->ticket);
-                break;
+        if ($this->proximal) {
+            app(EvolutionApiService::class)
+                ->ticketStatusPosition($this->ticket->client->phone, $this->ticket);
+        } else {
+            switch ($actualStatus) {
+                case QueueTicketStatus::CALLING->value:
+                    app(EvolutionApiService::class)
+                        ->ticketStatusCalling($this->ticket->client->phone, $this->ticket);
+                    break;
+                case QueueTicketStatus::EXPIRED->value:
+                    app(EvolutionApiService::class)
+                        ->ticketStatusExpired($this->ticket->client->phone, $this->ticket);
+                    break;
+                case QueueTicketStatus::WAITING->value:
+                    app(EvolutionApiService::class)
+                        ->ticketStatusWaiting($this->ticket->client->phone, $this->ticket);
+                    break;
+            }
         }
     }
 }

@@ -14,7 +14,6 @@ class ClientFactory extends Factory
     {
         return [
             'name' => $this->faker->name(),
-            'phone' => $this->faker->phoneNumber(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];

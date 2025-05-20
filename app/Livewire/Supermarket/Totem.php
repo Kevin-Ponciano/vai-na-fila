@@ -21,8 +21,6 @@ class Totem extends Component
     /* -----------------------------------------------------------------
      |  Constantes de configuração
      |------------------------------------------------------------------*/
-    private const WAIT_TIME_MIN = 5;    // quanto tempo esperamos pelo QR-Code
-    private const TOKEN_TTL_MIN = 10;   // expiração do QR-code em minutos
     private const TOKEN_LENGTH = 12;   // caracteres do token
     private const LOCK_TTL_SEC = 3;    // quanto tempo o lock fica ativo
     private const LOCK_WAIT_SEC = 10;    // quanto tempo esperamos pelo lock
@@ -37,6 +35,7 @@ class Totem extends Component
     public ?string $token = null;
     public bool $loading = false;
     public ?string $url;
+    public int $qrcode_expiration_time;
 
     /* -----------------------------------------------------------------
      |  Ciclo de vida
@@ -45,6 +44,8 @@ class Totem extends Component
     {
         // garanta 404 se fila não pertencer ao usuário
         $this->queue = auth()->user()?->supermarket->queues->findOrFail($id);
+
+        $this->qrcode_expiration_time = config('vainafila.qrcode_expiration_time');
     }
 
     /* -----------------------------------------------------------------
@@ -86,17 +87,17 @@ class Totem extends Component
                         Cache::set(
                             $this->token,
                             $this->queueTicketId,
-                            now()->addMinutes(self::TOKEN_TTL_MIN)
+                            now()->addMinutes($this->qrcode_expiration_time + 3)
                         );
 
                         CancelQrCodeTicketJob::dispatch(
                             $this->queueTicketId,
                             $this->token
-                        )->delay(now()->addMinutes(self::WAIT_TIME_MIN));
+                        )->delay(now()->addMinutes($this->qrcode_expiration_time));
 
                         /* 4. Dispara evento para JS gerar o QR-code */
                         $url = route('queue.join', ['token' => $this->token]);
-                        $this->dispatch('generateQrCode', url: $url,wait: self::WAIT_TIME_MIN);
+                        $this->dispatch('generateQrCode', url: $url,wait: $this->qrcode_expiration_time);
                         $this->url = $url;
                     });
                 });

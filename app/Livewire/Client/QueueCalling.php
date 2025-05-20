@@ -10,14 +10,13 @@ use Livewire\Component;
 class QueueCalling extends Component
 {
     public QueueTicket $ticket;
-    const EXPIRATION_TIME = 0.5; // minutes
     public $timeLeft;
 
     public function mount($id)
     {
         $this->ticket = Auth::user()->queueTickets()->findOrFail($id);
 
-        if($this->ticket->status !== QueueTicketStatus::CALLING->value){
+        if ($this->ticket->status !== QueueTicketStatus::CALLING->value) {
             $message = $this->ticket->status === QueueTicketStatus::IN_SERVICE->value
                 ? 'Você Está em Atendimento!'
                 : 'Senha já chamada ou ainda em espera!';
@@ -28,10 +27,10 @@ class QueueCalling extends Component
         }
 
         $this->timeLeft = $this->ticket->called_at
-            ->addMinutes(self::EXPIRATION_TIME)
+            ->addMinutes((int)config('vainafila.ticket_expiration_time'))
             ->addSeconds(5)
             ->diffInSeconds(now());
-        if ($this->timeLeft >= 0){
+        if ($this->timeLeft >= 0) {
             $this->timeLeft = 0;
         }
     }

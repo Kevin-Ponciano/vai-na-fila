@@ -23,7 +23,7 @@ class QueuePosition extends Component
                     QueueTicketStatus::WAITING,
                     QueueTicketStatus::CALLING,
                     QueueTicketStatus::IN_SERVICE,
-                ])->orExpiredStillValid();   // ← escopo
+                ])->orExpiredStillValid();
             })
             ->first();
 

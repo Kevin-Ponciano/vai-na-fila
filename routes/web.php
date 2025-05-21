@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ClientAuthController;
 use App\Http\Middleware\ClientAuthMiddleware;
+use App\Http\Middleware\IsAdminMiddleware;
 use App\Livewire\Client\MyQueues;
 use App\Livewire\Client\PhoneNumberRegister;
 use App\Livewire\Client\QueueCalling;
@@ -32,8 +33,8 @@ Route::prefix('supermarket')->middleware([
     Route::get('filas/{id}/totem', Totem::class)->name('queues.totem');
 
 
-    Route::get('relatorios', Reports::class)->name('reports');
-    Route::get('usuarios', Users::class)->name('users');
+    Route::get('relatorios', Reports::class)->name('reports')->middleware(IsAdminMiddleware::class);
+    Route::get('usuarios', Users::class)->name('users')->middleware(IsAdminMiddleware::class);
 
     Route::get(RoutePath::for('logout', '/logout'), [AuthenticatedSessionController::class, 'destroy'])
         ->middleware([config('fortify.auth_middleware', 'auth') . ':' . config('fortify.guard')])

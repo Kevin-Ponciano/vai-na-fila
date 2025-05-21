@@ -1,3 +1,7 @@
+@php
+    $isAdmin = auth()->user()->isAdmin();
+@endphp
+
 <x-navbar title="Bem vindo" :subtitle="auth()->user()->supermarket->name">
     <x-slot:imageProfile>
         <button data-dropdown-toggle="dropdownProfile" data-dropdown-placement="bottom-start"
@@ -12,18 +16,20 @@
         <div id="dropdownProfile"
              class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-44 dark:bg-gray-700">
             <ul class="py-2 text-sm text-primary text-center dark:text-gray-200">
-                <li>
-                    <a href="#"
-                       class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                       aria-current="page"
-                    >Perfil</a>
-                </li>
-                <hr class="text-primary-dark">
-                <li>
-                    <a href="#"
-                       class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Configurações</a>
-                </li>
-                <hr class="text-primary-dark">
+                @if($isAdmin)
+                    <li>
+                        <a href="#"
+                           class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                           aria-current="page"
+                        >Perfil</a>
+                    </li>
+                    <hr class="text-primary-dark">
+                    <li>
+                        <a href="#"
+                           class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Configurações</a>
+                    </li>
+                    <hr class="text-primary-dark">
+                @endif
                 <li>
                     <a href="{{route('logout')}}"
                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">

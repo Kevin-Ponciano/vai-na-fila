@@ -21,7 +21,7 @@ class ClientAuthController extends Controller
             ->where('status', QueueTicketStatus::PROCESSING->value)
             ->firstOrFail();
 
-        broadcast(new QueueTicketGeneratedEvent($ticket));
+        QueueTicketGeneratedEvent::dispatch($ticket);
         $user = $this->authenticate();
 
         $ticket->update([

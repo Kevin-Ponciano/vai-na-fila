@@ -6,6 +6,7 @@ use App\Enums\UserRole;
 use App\Enums\UserType;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -40,6 +41,7 @@ class User extends Authenticatable
 
     protected $appends = [
         'profile_photo_url',
+        'role_name',
     ];
 
     public function supermarket(): BelongsTo
@@ -57,6 +59,20 @@ class User extends Authenticatable
         return UserType::SUPERMARKET->value;
     }
 
+    public function roleName(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => UserRole::tryFrom($this->role)->name(),
+        );
+    }
+
+
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
     protected function casts(): array
     {
         return [

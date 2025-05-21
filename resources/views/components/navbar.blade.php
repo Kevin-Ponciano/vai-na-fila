@@ -4,6 +4,9 @@
             @isset($title)
                 <p class="antialiased text-sm text-white">{{$title}}</p>
                 <div class="antialiased font-bold text-white">{{$subtitle}}</div>
+                <div class="antialiased text-sm text-white">
+                    {{auth()->user()->name}} ({{auth()->user()->role_name}})
+                </div>
             @endisset
         </div>
         @persist('dropdown')

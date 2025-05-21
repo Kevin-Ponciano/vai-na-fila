@@ -35,6 +35,7 @@ class QueueTicket extends Model
 
     protected $appends = [
         'status_name',
+        'position',
     ];
 
     static function boot(): void
@@ -67,14 +68,15 @@ class QueueTicket extends Model
      * cujo called_at ocorreu dentro da janela dada.
      *
      * @param Builder $query
-     * @param int $minutes Janela em minutos (default = 5)
+     * @param int|null $minutes Janela em minutos (default = 5)
      * @return Builder
      */
     public function scopeOrExpiredStillValid(
         Builder $query,
-        int     $minutes = 5
+        int     $minutes = null
     ): Builder
     {
+        $minutes = $minutes ?? (int) config('vainafila.ticket_expiration_validation_time');
         $windowStart = Carbon::now()->subMinutes($minutes);
 
         return $query->orWhere(function (Builder $sub) use ($windowStart) {
@@ -96,6 +98,19 @@ class QueueTicket extends Model
     public function notifications(): QueueTicket|HasMany
     {
         return $this->hasMany(Notification::class);
+    }
+
+    public function position(): Attribute
+    {
+        $positionNumber = $this->queue->queueTickets()
+                ->where('status', QueueTicketStatus::WAITING)
+                ->where('priority', $this->priority)
+                ->where('id', '!=', $this->id)
+                ->where('created_at', '<=', $this->created_at)
+                ->count() + 1;
+        return new Attribute(
+            get: fn() => $positionNumber . '° - ' . QueueTicketPriority::tryFrom($this->priority)->name(),
+        );
     }
 
     protected function statusName(): Attribute

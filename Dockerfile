@@ -24,11 +24,13 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \
         mysqli pdo_mysql \
         session xml sockets zip iconv simplexml pcntl gd fileinfo
 
-# Redis & Swoole via PECL
-RUN pecl install redis-${REDIS_LIB_VERSION} && \
-    docker-php-ext-enable redis && \
-    pecl install swoole && \
-    docker-php-ext-enable swoole
+# ──────────────── Redis ──────────────
+RUN pecl install redis-${REDIS_LIB_VERSION} \
+    && docker-php-ext-enable redis
+
+# ──────────────── Swoole ──────────────────────
+RUN pecl install swoole
+RUN docker-php-ext-enable swoole
 
 # ──────────────── Composer & Node ─────────────
 RUN curl -sS https://getcomposer.org/installer | \

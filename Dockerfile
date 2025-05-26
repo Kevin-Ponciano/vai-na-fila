@@ -48,10 +48,6 @@ RUN mkdir -p ${LIVEWIRE_TEMP_DIR} \
 RUN npm install && npm run build \
  && composer install --no-interaction --no-dev --optimize-autoloader
 
-# Octane + Reverb
-RUN php artisan octane:install --server=swoole \
- && php artisan reverb:install || true
-
 # Caches
 RUN php artisan config:cache   && \
     php artisan route:cache    && \

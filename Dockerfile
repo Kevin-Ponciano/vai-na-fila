@@ -7,7 +7,7 @@ FROM php:8.3.2-bullseye
 # ---------------------------- ARGs ---------------------------------
 ARG APP_DIR=/var/www/app
 ARG LIVEWIRE_TEMP_DIR=/var/www/app/storage/app/livewire-tmp
-ARG REDIS_LIB_VERSION=5.3.7           # ext-redis
+ARG REDIS_LIB_VERSION=5.3.7
 
 # --------------------- Pacotes de sistema --------------------------
 RUN apt-get update -y && apt-get install -y --no-install-recommends \
@@ -50,7 +50,7 @@ RUN npm install && npm run build \
 
 # Octane + Reverb
 RUN php artisan octane:install --server=swoole \
- && php artisan reverb:install || true          # caso já esteja instalado
+ && php artisan reverb:install || true
 
 # Caches
 RUN php artisan config:cache   && \

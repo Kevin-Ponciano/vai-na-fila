@@ -38,7 +38,7 @@ Route::prefix('supermarket')->middleware([
 
     Route::get(RoutePath::for('logout', '/logout'), [AuthenticatedSessionController::class, 'destroy'])
         ->middleware([config('fortify.auth_middleware', 'auth') . ':' . config('fortify.guard')])
-        ->name('logout');
+        ->name('supermarket.logout');
 });
 
 Route::prefix('cliente')->middleware(ClientAuthMiddleware::class)->group(function () {

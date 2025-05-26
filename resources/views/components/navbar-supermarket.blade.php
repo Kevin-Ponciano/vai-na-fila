@@ -31,7 +31,7 @@
                     <hr class="text-primary-dark">
                 @endif
                 <li>
-                    <a href="{{route('logout')}}"
+                    <a href="{{route('supermarket.logout')}}"
                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                         Sair
                     </a>

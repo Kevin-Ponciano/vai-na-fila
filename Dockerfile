@@ -10,10 +10,10 @@ ARG LIVEWIRE_TEMP_DIR=/var/www/app/storage/app/livewire-tmp
 ARG REDIS_LIB_VERSION=5.3.7
 
 # --------------------- Pacotes de sistema --------------------------
-RUN apt-get update -y && apt-get install -y --no-install-recommends \
+RUN apt-get update -y && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     apt-utils supervisor cron nano wget lsb-release gnupg2 unzip \
     libbrotli-dev zlib1g-dev libzip-dev libpng-dev libxml2-dev \
-    libmysqlclient-dev default-mysql-client nginx
+    default-libmysqlclient-dev default-mysql-client nginx
 
 # ------------------ Extensões / PECL / Composer --------------------
 RUN docker-php-ext-install mysqli pdo pdo_mysql session xml \

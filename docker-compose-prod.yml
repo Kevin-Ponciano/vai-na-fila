@@ -1,0 +1,45 @@
+version: "3.9"
+
+services:
+  vai-na-fila:
+    image: laravel-vai-na-fila:${IMAGE_TAG}   # <── tag chega via variável de ambiente
+    networks: [ traefik_public ]
+    deploy:
+      replicas: 1
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.vai-na-fila.rule=Host(`vai-na-fila.autonix.com.br`)"
+        - "traefik.http.routers.vai-na-fila.entrypoints=https"
+        - "traefik.http.routers.vai-na-fila.tls=true"
+        - "traefik.http.services.vai-na-fila.loadbalancer.server.port=80"
+      resources:
+        limits: { cpus: "2", memory: 4G }
+      restart_policy: { condition: on-failure }
+
+  db-mysql:
+    image: bitnami/mysql:9.3.0
+    environment:
+      MYSQL_ROOT_PASSWORD:  ${MYSQL_ROOT_PWD}
+      MYSQL_DATABASE:       vai_na_fila
+      MYSQL_USER:           vai_na_fila
+      MYSQL_PASSWORD:       ${MYSQL_USER_PWD}
+    volumes: [ db-mysql-data:/bitnami/mysql/data ]
+    networks: [ traefik_public ]
+    deploy:
+      resources:
+        limits: { cpus: "1", memory: 2G }
+
+  cache-redis:
+    image: bitnami/redis:latest
+    environment: [ ALLOW_EMPTY_PASSWORD=yes ]
+    networks: [ traefik_public ]
+    deploy:
+      resources:
+        limits: { cpus: "0.5", memory: 1G }
+
+networks:
+  traefik_public:
+    external: true
+
+volumes:
+  db-mysql-data:

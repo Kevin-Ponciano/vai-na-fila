@@ -1,0 +1,49 @@
+name: Laravel CI/CD — Build no Host
+
+on:
+  push:
+    branches: [ main ]
+  pull_request_review:
+    branches: [ main ]
+    types: [ submitted ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1) (opcional) Só para ter o código local p/ linter, etc.
+    - uses: actions/checkout@v4
+
+    # 2) Define a tag (SHA curto) e exporta
+    - id: vars
+      run: echo "IMAGE_TAG=${GITHUB_SHA::8}" >> "$GITHUB_ENV"
+
+    # 3) Entra no host por SSH (senha) e faz tudo lá
+    - name: Build & Deploy on Swarm host
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host:      ${{ secrets.HOST }}
+        port:      ${{ secrets.PORT }}
+        username:  ${{ secrets.USERNAME }}
+        password:  ${{ secrets.PASSWORD }}
+        envs: IMAGE_TAG   # passa a variável para o shell remoto
+        script: |
+          set -e
+
+          cd ~/vai-na-fila             # repositório já clonado no host
+          git fetch --all
+          git reset --hard origin/main
+
+          # Build da imagem localmente
+          docker build -t laravel-vai-na-fila:${IMAGE_TAG} .
+
+          # Variáveis de compose (DB)
+          export IMAGE_TAG=${IMAGE_TAG}
+          export MYSQL_ROOT_PWD='${{ secrets.MYSQL_ROOT_PWD }}'
+          export MYSQL_USER_PWD='${{ secrets.MYSQL_USER_PWD }}'
+
+          # Deploy / atualização da stack
+          docker stack deploy --compose-file docker-compose-prod.yml \
+                              --prune laravel-vai-na-fila

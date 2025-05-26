@@ -30,11 +30,11 @@ RUN curl -sL https://deb.nodesource.com/setup_21.x | bash - \
 COPY ./docker/php/extra-php.ini "$PHP_INI_DIR/99_extra.ini"
 
 # Supervisor: Octane + Reverb no mesmo arquivo
-COPY ./docker/supervisord/supervisord.octane-reverb.conf /etc/supervisor/conf.d/supervisord.conf
+COPY ./docker/supervisord/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Nginx
 RUN rm -rf /etc/nginx/sites-enabled/* /etc/nginx/sites-available/*
-COPY ./docker/nginx/sites.octane.conf /etc/nginx/sites-enabled/default.conf
+COPY ./docker/nginx/sites.conf /etc/nginx/sites-enabled/default.conf
 COPY ./docker/nginx/error.html /var/www/html/error.html
 
 # ---------------------- Código da aplicação ------------------------

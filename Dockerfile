@@ -43,6 +43,8 @@ COPY ./docker/nginx/error.html /var/www/html/error.html
 # ---------------------- Código da aplicação ------------------------
 WORKDIR ${APP_DIR}
 COPY --chown=www-data:www-data . .
+RUN chmod -R 777 bootstrap/cache
+RUN chmod -R 777 storage
 
 RUN mkdir -p ${LIVEWIRE_TEMP_DIR} \
  && chown -R www-data:www-data ${LIVEWIRE_TEMP_DIR} ${APP_DIR}

@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   vai-na-fila:
-    image: laravel-vai-na-fila:${IMAGE_TAG}   # <── tag chega via variável de ambiente
+    image: laravel-vai-na-fila:latest
     networks: [ traefik_public ]
     deploy:
       replicas: 1

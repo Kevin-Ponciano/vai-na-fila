@@ -45,6 +45,7 @@ WORKDIR ${APP_DIR}
 COPY --chown=www-data:www-data . .
 RUN chmod -R 777 bootstrap/cache
 RUN chmod -R 777 storage
+run php artisan storage:link
 
 RUN mkdir -p ${LIVEWIRE_TEMP_DIR} \
  && chown -R www-data:www-data ${LIVEWIRE_TEMP_DIR} ${APP_DIR}

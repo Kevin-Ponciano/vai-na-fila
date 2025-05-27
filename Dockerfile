@@ -17,10 +17,11 @@ RUN apt-get update -y && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-
 
 # ------------------ Extensões / PECL / Composer --------------------
 RUN docker-php-ext-install mysqli pdo pdo_mysql session xml \
- && pecl install redis-${REDIS_LIB_VERSION} swoole \
- && docker-php-ext-enable redis swoole \
  && docker-php-ext-install zip iconv simplexml pcntl gd fileinfo \
  && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+RUN pecl install redis-${REDIS_LIB_VERSION} \
+    && docker-php-ext-enable redis
 
 # -------------------------- Node.js --------------------------------
 RUN curl -sL https://deb.nodesource.com/setup_21.x | bash - \

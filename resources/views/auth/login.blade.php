@@ -1,16 +1,15 @@
-@php use App\Models\User; @endphp
+@php use App\Models\User;
+ $userLogin = User::first()
+@endphp
 <x-guest-layout>
-    @php
-        $userLogin = User::first()
-    @endphp
-
-    <script>
-        $(document).ready(function () {
-            $('#email').val('{{$userLogin->email}}')
-            $('#password').val('123')
-        })
-    </script>
-
+    @if(config('app.env') === 'local')
+        <script>
+            $(document).ready(function () {
+                $('#email').val('{{$userLogin->email}}')
+                $('#password').val('123')
+            })
+        </script>
+    @endif
     <x-authentication-card>
         <x-slot name="logo">
             <x-authentication-card-logo/>

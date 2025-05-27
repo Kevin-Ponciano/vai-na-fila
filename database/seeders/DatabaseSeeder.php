@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $supermarkets = Supermarket::factory(2)->create();
+        //$supermarkets = Supermarket::factory(2)->create();
 
         AdminUser::create([
             'name' => 'admin',
@@ -29,35 +29,35 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('123'),
         ]);
 
-        foreach ($supermarkets as $supermarket) {
-            $user = User::factory()->create([
-                'name' => 'user' . $supermarket->id,
-                'email' => 'user' . $supermarket->id . '@gmail.com',
-                'supermarket_id' => $supermarket->id,
-                'role' => UserRole::OPERATOR,
-            ]);
-
-            $admin = User::factory()->create([
-                'name' => 'admin' . $supermarket->id,
-                'email' => 'admin' . $supermarket->id . '@gmail.com',
-                'supermarket_id' => $supermarket->id,
-                'role' => UserRole::ADMIN,
-            ]);
-
-            $queues = $supermarket->queues;
-            $timestamp = Carbon::now();
-            foreach ($queues as $queue) {
-                for ($i = 0; $i < 10; $i++) {
-                    $timestamp->addMinutes(2);
-                    QueueTicket::factory()->create([
-                        'queue_id' => $queue->id,
-                        'status' => QueueTicketStatus::WAITING,
-                        'created_at' => $timestamp
-                    ]);
-                }
-            }
-            //$this->createReports($supermarket->id);
-        }
+//        foreach ($supermarkets as $supermarket) {
+//            $user = User::factory()->create([
+//                'name' => 'user' . $supermarket->id,
+//                'email' => 'user' . $supermarket->id . '@gmail.com',
+//                'supermarket_id' => $supermarket->id,
+//                'role' => UserRole::OPERATOR,
+//            ]);
+//
+//            $admin = User::factory()->create([
+//                'name' => 'admin' . $supermarket->id,
+//                'email' => 'admin' . $supermarket->id . '@gmail.com',
+//                'supermarket_id' => $supermarket->id,
+//                'role' => UserRole::ADMIN,
+//            ]);
+//
+//            $queues = $supermarket->queues;
+//            $timestamp = Carbon::now();
+//            foreach ($queues as $queue) {
+//                for ($i = 0; $i < 10; $i++) {
+//                    $timestamp->addMinutes(2);
+//                    QueueTicket::factory()->create([
+//                        'queue_id' => $queue->id,
+//                        'status' => QueueTicketStatus::WAITING,
+//                        'created_at' => $timestamp
+//                    ]);
+//                }
+//            }
+//            //$this->createReports($supermarket->id);
+//        }
     }
 
     private function createReports($supermarketId): void

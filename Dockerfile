@@ -45,7 +45,6 @@ WORKDIR ${APP_DIR}
 COPY --chown=www-data:www-data . .
 RUN chmod -R 777 bootstrap/cache
 RUN chmod -R 777 storage
-RUN php artisan storage:link
 
 RUN mkdir -p ${LIVEWIRE_TEMP_DIR} \
  && chown -R www-data:www-data ${LIVEWIRE_TEMP_DIR} ${APP_DIR}
@@ -58,7 +57,8 @@ RUN npm install && npm run build \
 RUN php artisan config:cache   && \
     php artisan route:cache    && \
     php artisan view:cache     && \
-    php artisan event:cache
+    php artisan event:cache   && \
+    php artisan storage:link
 
 # Cron (scheduler)
 RUN echo "* * * * * cd ${APP_DIR} && php artisan schedule:run" > /etc/cron.d/laravel \

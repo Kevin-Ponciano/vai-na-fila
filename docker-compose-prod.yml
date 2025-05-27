@@ -16,7 +16,7 @@ services:
         limits: { cpus: "2", memory: 4G }
       restart_policy: { condition: on-failure }
       placement:
-        constraints: [ node.hostname == autonix-server-02 ]
+        constraints: [ node.hostname == workflow-tvix01 ]
 
   db-mysql:
     image: bitnami/mysql:9.3.0

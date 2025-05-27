@@ -30,6 +30,8 @@ services:
     deploy:
       resources:
         limits: { cpus: "1", memory: 2G }
+      placement:
+        constraints: [ node.hostname == workflow-tvix01 ]
 
   cache-redis:
     image: bitnami/redis:latest
@@ -38,6 +40,8 @@ services:
     deploy:
       resources:
         limits: { cpus: "0.5", memory: 1G }
+      placement:
+        constraints: [ node.hostname == workflow-tvix01 ]
 
 networks:
   traefik_public:

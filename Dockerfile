@@ -2,7 +2,7 @@
 #  Base ‒ PHP-FPM 8.3 + Debian Bullseye
 # -------------------------------------------------------------------
 ARG PHP_VERSION
-FROM php:8.3.2-bullseye
+FROM php:8.3.21-fpm-bullseye
 
 # ---------------------------- ARGs ---------------------------------
 ARG APP_DIR=/var/www/app
@@ -28,9 +28,11 @@ RUN curl -sL https://deb.nodesource.com/setup_21.x | bash - \
 
 # ------------------------ Configuração -----------------------------
 COPY ./docker/php/extra-php.ini "$PHP_INI_DIR/99_extra.ini"
+COPY ./docker/php/extra-php-fpm.conf /etc/php8/php-fpm.d/www.conf
 
 # Supervisor: Octane + Reverb no mesmo arquivo
 COPY ./docker/supervisord/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
 
 # Nginx
 RUN rm -rf /etc/nginx/sites-enabled/* /etc/nginx/sites-available/*
